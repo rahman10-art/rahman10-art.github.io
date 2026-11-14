@@ -3,7 +3,7 @@ import { heroImages } from "@/data/content";
 import Pill from "./Pill";
 
 export default function CtaBanner({
-  title = "Explore analog & space electronics with Muntaha Rahman",
+  title = "Explore my research and engineering projects",
   href = "/projects/",
   label = "View projects",
 }: {

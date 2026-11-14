@@ -28,9 +28,9 @@ export default function AboutPage() {
               ))}
             </div>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Pill href={profile.resume}>Download my résumé</Pill>
+              <Pill href={profile.resume}>Download résumé</Pill>
               <Pill href={`mailto:${profile.email}`} variant="outline">
-                Email me
+                Contact
               </Pill>
             </div>
           </div>
@@ -52,10 +52,10 @@ export default function AboutPage() {
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-[380px_1fr] lg:gap-24">
           <div>
             <h2 className="text-4xl font-light leading-tight tracking-tight sm:text-5xl">
-              It all started with a small step…
+              Personal Statement
             </h2>
             <p className="mt-5 text-muted">
-              Personal statement &amp; research interests
+              Research interests and motivation
             </p>
           </div>
           <div className="max-w-2xl space-y-6 text-lg leading-relaxed text-muted">

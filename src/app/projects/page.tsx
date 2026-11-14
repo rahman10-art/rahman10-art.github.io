@@ -17,7 +17,7 @@ export default function ProjectsPage() {
         image={heroImages.projects}
         align="center"
         title="Projects"
-        subtitle="Selected research and design projects from my undergraduate and doctoral work. Choose a project to read about the problem, my approach, my role and the results."
+        subtitle="Selected research and design projects from my undergraduate and doctoral studies. Each case study describes the problem, approach, my contributions and the results."
       />
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-8 sm:py-28">
@@ -46,7 +46,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <CtaBanner title="Want the full picture?" href="/summary/" label="Professional summary" />
+      <CtaBanner title="Publications, skills and résumé" href="/summary/" label="Professional summary" />
     </>
   );
 }

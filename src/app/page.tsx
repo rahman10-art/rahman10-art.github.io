@@ -62,7 +62,7 @@ export default function Home() {
       <PageHero
         size="lg"
         image={heroImages.home}
-        title={<>Designing the circuits that sense our bodies and explore our universe.</>}
+        title={<>Integrated circuits and electronic systems for biomedical sensing and space exploration.</>}
         subtitle={`${profile.name} — ${profile.title}. ${profile.role}.`}
       >
         <Pill href="/about/" variant="ghost-light">
@@ -75,7 +75,7 @@ export default function Home() {
 
       <Feature
         title="Analog & mixed-signal integrated circuits"
-        body="I am a third-year Ph.D. student at the University of Maryland, College Park, majoring in microelectronics. I design analog and mixed-signal ICs — from transistor-level amplifiers to full analog VLSI systems — for biomedical, sensing and space-exploration applications."
+        body="I am a third-year Ph.D. student at the University of Maryland, College Park, majoring in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits, from transistor-level amplifiers to complete analog VLSI systems, for biomedical, sensing and space-exploration applications."
         image={profile.photo}
         photo
         href="/about/"
@@ -85,7 +85,7 @@ export default function Home() {
       <Feature
         flip
         title="Electronics for space, sensing and medicine"
-        body="My work has taken me from radiation-effects analysis on a NASA cosmic-ray detector aboard the International Space Station, to harvesting energy from arcs on satellite solar panels, to custom rigid-flex PCBs for an ingestible medical capsule."
+        body="My project experience includes radiation-effects analysis for a cosmic-ray instrument aboard the International Space Station, energy harvesting from electrostatic arcing on satellite solar arrays, and rigid-flex PCB design for an ingestible medical device."
         image={
           (capsule.figures.find((f) => f.caption.startsWith("How the capsule works")) ?? capsule.figures[0]).src
         }
@@ -97,12 +97,10 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 sm:px-8">
         <div className="border-t border-line pt-20 text-center sm:pt-28">
           <h2 className="mx-auto max-w-3xl text-3xl font-light leading-tight tracking-tight sm:text-4xl">
-            Selected work: from transistor layout to spaceborne instruments
+            Selected Projects
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-muted">
-            A few of the research and design projects I have led or contributed
-            to. Each links to a detailed case study with figures, methods and
-            results.
+            Research and design projects in integrated circuits, space instrumentation and biomedical hardware. Each links to a detailed case study covering methods, contributions and results.
           </p>
         </div>
 

@@ -67,15 +67,15 @@ export const profile = {
   seeking: "Open to analog / mixed-signal IC and hardware internships",
   about: [
     "I am a third-year Ph.D. student in Electrical and Electronics Engineering at the University of Maryland, College Park, specializing in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits for biomedical, sensing and space-exploration applications.",
-    "I am particularly drawn to electronics for spaceborne instrumentation — payloads, particle detectors and CubeSats. That interest started as a teenager watching the Apollo 11 landing and visiting the only observatory in my hometown of Dhaka, Bangladesh, and it carried me through undergraduate space-research projects into my doctoral work.",
-    "Beyond space systems, I enjoy working across domains: from transistor-level amplifier layout to custom PCBs for ingestible medical devices, and from radiation-effects analysis on the International Space Station to neuromorphic VLSI.",
+    "My primary interest is electronics for spaceborne instrumentation, including payloads, particle detectors and CubeSats. This interest began with my early exposure to space science in Dhaka, Bangladesh, and has guided my work from undergraduate space-research projects through my doctoral research.",
+    "My project experience spans several areas of electrical engineering: transistor-level amplifier design and layout, rigid-flex PCB design for ingestible medical devices, radiation-effects analysis for an instrument aboard the International Space Station, and analog VLSI for neural-signal processing.",
   ],
   /** Longer personal statement shown on the About page */
   statement: [
     "My research spans analog, mixed-signal and VLSI design in applications such as biomedical sensing, wireless sensing and space exploration. I have a particularly strong interest in electronics and integrated-circuit systems for spaceborne instrumentation, payloads and particle detectors, as well as space missions and CubeSat design.",
-    "That interest began when I was a teenager. I remember being captivated by documentaries like Journey to the Edge of the Universe and by the historic Apollo 11 Moon landing on National Geographic — Neil Armstrong's words, \"That's one small step for man, one giant leap for mankind,\" still resonate with me as powerfully as they did the first time I heard them. My curiosity deepened when I visited the only space observatory in my hometown of Dhaka, Bangladesh. Standing under its dome, I wanted to understand the creation and evolution of the cosmos, and the potential for life across its planets, moons and galaxies — firsthand.",
-    "Driven by that, I worked on space-exploration projects throughout my undergraduate studies in electronics engineering, where I found my focus: analog integrated circuits and electronic systems for the instruments and detectors used in planetary exploration, astrophysics and astronomy. I continue to pursue this through my doctoral research.",
-    "I also love exploring other domains in electrical engineering — in particular, analog and mixed-signal circuits for biomedical sensing and implantable technologies.",
+    "My interest in space science began in my teenage years, through documentaries such as Journey to the Edge of the Universe and the broadcast of the Apollo 11 Moon landing. A visit to the only space observatory in my hometown of Dhaka, Bangladesh, strengthened that interest and motivated me to pursue research that contributes to our understanding of the origin and evolution of the universe.",
+    "During my undergraduate studies in electronics engineering, I worked on several space-exploration projects, through which I identified my research focus: analog integrated circuits and electronic systems for the instruments and detectors used in planetary exploration, astrophysics and astronomy. I am continuing this work in my doctoral research.",
+    "I am also interested in other areas of electrical engineering, particularly analog and mixed-signal circuits for biomedical sensing and implantable technologies.",
   ],
   interests: [
     "Analog IC design",
@@ -129,7 +129,7 @@ export const projects: Project[] = [
     shortTitle: "Low-Power OTA — TSMC 180 nm",
     category: "IC Design",
     summary:
-      "End-to-end design of a single-stage, single-ended OTA in Cadence Virtuoso: schematic, simulation, common-centroid layout and post-layout verification, meeting all specs at 72.5 µW.",
+      "End-to-end design of a single-stage, single-ended OTA in Cadence Virtuoso: schematic, simulation, common-centroid layout and post-layout verification, meeting all specifications at 72.5 µW.",
     cover: otaLayout,
     tags: [
       "Cadence Virtuoso",
@@ -216,7 +216,7 @@ export const projects: Project[] = [
     category: "Research",
     affiliation: "UMD Cosmic Ray Physics Group · Supervisor: Prof. Eun-Suk Seo",
     summary:
-      "Diagnosed why the pedestal (noise baseline) on 2,911 ADC readout channels of a NASA cosmic-ray detector aboard the ISS kept rising — tracing it to radiation-induced leakage current in the silicon sensors.",
+      "Identified the cause of progressive pedestal (baseline offset) drift across 2,911 ADC readout channels of the ISS-CREAM cosmic-ray instrument aboard the International Space Station, attributing it to radiation-induced leakage current in the silicon sensors.",
     cover: creamScd,
     tags: [
       "Detector Electronics",
@@ -241,14 +241,14 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paragraphs: [
-          "Pedestal means for both SCD layers rose steadily over the instrument's operating life, and channel-level analysis showed the same cumulative build-up. The question: was the cause in the front-end readout, the ADCs, or the silicon sensors themselves?",
+          "Pedestal means for both SCD layers rose steadily over the instrument's operating life, and channel-level analysis showed the same cumulative build-up. The objective was to determine whether the cause lay in the front-end readout electronics, the ADCs or the silicon sensors themselves.",
         ],
       },
       {
         heading: "Investigation",
         paragraphs: [
-          "I first examined electronic failure modes in the readout chain — ADC offset errors, leakage currents and similar effects. None explained the behavior. The SCD is power-cycled multiple times every hour, so any purely electrical noise would be reset; whatever caused the build-up had to survive power cycling and accumulate over time.",
-          "That pointed to the sensors. I concluded the pedestal growth was driven by rising leakage current in the silicon pixel sensors due to Non-Ionizing Energy Loss (NIEL): high-energy hadrons in the space radiation environment displace atoms from the silicon lattice, creating defects that migrate over time and increase the sensor's leakage current in proportion to accumulated particle fluence.",
+          "I first examined electronic failure modes in the readout chain — ADC offset errors, leakage currents and similar effects. None of these accounted for the observed behavior. The SCD is power-cycled multiple times every hour, so any purely electrical noise would be reset; the underlying cause therefore had to persist through power cycling and accumulate over time.",
+          "This pointed to the sensors themselves. I concluded that the pedestal growth was driven by rising leakage current in the silicon pixel sensors due to Non-Ionizing Energy Loss (NIEL): high-energy hadrons in the space radiation environment displace atoms from the silicon lattice, creating defects that migrate over time and increase the sensor's leakage current in proportion to accumulated particle fluence.",
           "This mechanism is consistent with displacement damage observed elsewhere — for example, the steady increase in leakage current of silicon pixel detectors in the CMS experiment at CERN's LHC.",
         ],
       },

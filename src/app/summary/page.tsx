@@ -39,9 +39,9 @@ export default function SummaryPage() {
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Pill href={profile.resume} variant="outline">
-            Download my résumé
+            Download résumé
           </Pill>
-          <Pill href="/about/">More about me</Pill>
+          <Pill href="/about/">About me</Pill>
           <Pill href="/projects/" variant="outline">
             All projects
           </Pill>
