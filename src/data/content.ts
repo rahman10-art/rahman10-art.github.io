@@ -29,8 +29,16 @@ import creamChannelPedestal from "@/assets/cream/channel-pedestal.png";
 import creamCmsLeakage from "@/assets/cream/cms-leakage.png";
 
 import spikeBlock from "@/assets/spike/block-diagram.png";
-import spikeSchematic from "@/assets/spike/vlsi-schematic.png";
+import spikeElectrodes from "@/assets/spike/electrode-signals.png";
+import spikeFft from "@/assets/spike/fft.png";
+import spikeFilterResponse from "@/assets/spike/filter-response.png";
+import spikeFiltered from "@/assets/spike/filtered-output.png";
+import spikePeakDetector from "@/assets/spike/peak-detector.png";
+import spikeSampleHold from "@/assets/spike/sample-hold-output.png";
+import spikeBump from "@/assets/spike/bump-circuit.png";
+import spikeWta from "@/assets/spike/wta-circuit.png";
 import spikeOutput from "@/assets/spike/neuron-output.png";
+import spikeChip from "@/assets/spike/chip-schematic.png";
 
 import fcFinalAssembly from "@/assets/fructocare/final-assembly.png";
 import fcProcessFlow from "@/assets/fructocare/process-flow.png";
@@ -266,59 +274,109 @@ export const projects: Project[] = [
     title: "Custom Analog VLSI Chip for Neuron Spike Sorting",
     shortTitle: "Neuron Spike-Sorting VLSI",
     category: "IC Design",
+    affiliation:
+      "ENEE 611: Integrated Circuits Design and Analysis · University of Maryland · Individual project",
     summary:
-      "A custom analog VLSI system that detects and classifies spikes from six neurons recorded on a 4-channel tetrode, learning each neuron's signature from teacher signals.",
-    cover: spikeSchematic,
+      "Designed a transistor-level analog VLSI system that detects and classifies spikes from six neurons recorded on a four-channel tetrode, learning each neuron's amplitude signature from teacher signals and producing a digital output for each neuron.",
+    cover: spikeBump,
     tags: [
       "Analog VLSI",
-      "MATLAB",
-      "Filter Design",
-      "Sample & Hold",
+      "Subthreshold Design",
+      "Gm-C Filters",
       "Winner-Take-All",
-      "ADC",
+      "SKY130 PDK",
+      "Xschem / ngspice",
+      "MATLAB",
     ],
     metrics: [
-      { value: "6", label: "Neurons classified" },
-      { value: "4", label: "Tetrode channels" },
-      { value: "5", label: "Signal-chain stages" },
+      { value: "6 / 4", label: "Neurons classified / tetrode channels" },
+      { value: "500 Hz–4 kHz", label: "Band-pass filter passband" },
+      { value: "~500", label: "Transistors in the full system" },
+      { value: "24", label: "Bump-circuit similarity comparators" },
     ],
     sections: [
       {
         heading: "Overview",
         paragraphs: [
-          "The goal was to design a custom VLSI chip that detects and sorts spike signals from six neurons measured with a tetrode (four electrode channels). Because each electrode sits at a different distance from each neuron, every neuron produces a unique amplitude \"signature\" across the channels. Six teacher signals indicate when each neuron fires and at what amplitude; the system stores these and uses them to identify firing neurons once the teachers are removed.",
+          "The objective was to design a custom analog VLSI chip that detects and sorts spikes from six neurons recorded with a tetrode (four electrode channels). Because each electrode sits at a different distance from each neuron, every neuron produces a distinct amplitude signature across the four channels. During training, six teacher signals indicate when each neuron fires; the chip stores the corresponding spike amplitudes and then uses them to identify which neuron is firing once the teacher signals are removed.",
+          "Each electrode channel is processed by an identical analog front-end (filter, peak detector, comparator, sample-and-hold and memory), and a shared classification stage compares live spikes against the stored signatures.",
         ],
       },
       {
-        heading: "System architecture",
+        heading: "Signal analysis",
+        paragraphs: [
+          "I first characterized the four electrode recordings and six teacher signals in MATLAB. FFT analysis after DC removal showed large 60 Hz power-line interference and significant low-frequency content below ~500 Hz, along with low-amplitude high-frequency noise above ~4 kHz. These results set the specification for a 500 Hz–4 kHz band-pass filter.",
+        ],
+      },
+      {
+        heading: "Circuit design",
         steps: [
           {
-            title: "Raw data analysis",
-            body: "Characterized electrode and teacher signals in MATLAB, using FFTs to identify noisy and redundant frequency content.",
-          },
-          {
-            title: "Filtering",
-            body: "Chose cut-off frequencies from the FFT analysis and designed a band-pass filter with a series buffer to isolate it from downstream stages.",
+            title: "Band-pass filter",
+            body: "First-order transconductance-amplifier (Gm-C) high-pass and low-pass sections in cascade, with the high-pass first to avoid saturation from large low-frequency interference. Initial bias points were derived from ωc = Gm/C and the subthreshold relation Gm = κIb/UT (κ ≈ 0.68, extracted from device characterization); final cut-offs were set through AC analysis. Unity-gain buffers isolate each stage.",
           },
           {
             title: "Peak detection",
-            body: "Designed a peak-detector circuit (with buffer) to identify when a neuron fires.",
+            body: "A transconductance-amplifier peak detector with a reset transistor captures spike peaks on each filtered channel; bias voltages were tuned for sharp detection.",
           },
           {
-            title: "Peak storage & sampling",
-            body: "Sample-and-hold circuit captures spike peaks; a teacher-driven memory circuit, hysteresis comparator and delay circuit decide when to store values.",
+            title: "Training memory",
+            body: "Six memory cells per electrode (24 in total) store spike amplitudes on 10 pF capacitors through pFET switches gated by the teacher signals.",
           },
           {
-            title: "Classification & output",
-            body: "Bump circuits and a winner-take-all network select the firing neuron; an ADC and digital logic (AND/OR) present the result as a pulse.",
+            title: "Triggered sample-and-hold",
+            body: "Without teacher signals, a hysteresis comparator (1.78 V threshold) detects spikes and triggers sampling. An inverter-chain delay aligns sampling with the trailing edge of each event to account for peak-detector decay, and a delayed reset clears the 10 pF hold capacitor for the next event.",
           },
+          {
+            title: "Classification",
+            body: "Bump circuits measure the similarity between each sampled amplitude and each stored signature. pFET current mirrors sum the bump currents for each neuron across all four electrodes, and a six-input winner-take-all circuit selects the neuron with the largest total current.",
+          },
+          {
+            title: "Digital output",
+            body: "The winner-take-all output is converted to 5 V logic levels. A four-input OR gate combines the electrode spike triggers and gates six AND gates, producing one digital output per neuron.",
+          },
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "During training, the digital outputs closely tracked their corresponding teacher signals. In the test period (from ≈355 ms, after the teacher signals end), the chip produced a classified firing sequence across the six neuron outputs. Initial overlap between neuron outputs was reduced by tuning the bump-circuit biases and transistor sizing; some residual overlap between neurons remained, which would be the focus of further optimization.",
+          "Estimated average power for the full system is approximately 10.8 mW, dominated by the bump circuits, memory, sample-and-hold and delay stages.",
+        ],
+      },
+    ],
+    tables: [
+      {
+        caption: "Transistor count and estimated power",
+        columns: ["Block", "Transistors", "Avg. power"],
+        rows: [
+          ["Band-pass filters", "40", "0.06 µW"],
+          ["Filter buffers", "20", "0.02 µW"],
+          ["Peak detectors", "28", "3.1 µW"],
+          ["Hysteresis comparator", "48", "1.1 µW"],
+          ["Delay circuits", "32", "1.0 mW"],
+          ["Sample-and-hold", "64", "1.5 mW"],
+          ["Memory", "54", "2.0 mW"],
+          ["Bump circuits", "120", "6.0 mW"],
+          ["Winner-take-all", "13", "< 0.01 µW"],
+          ["Analog-to-digital conversion", "24", "< 0.01 µW"],
+          ["AND / OR logic", "54", "0.3 mW"],
+          ["Total", "497", "≈ 10.8 mW"],
         ],
       },
     ],
     figures: [
-      { src: spikeBlock, caption: "Signal-chain block diagram" },
-      { src: spikeSchematic, caption: "Schematic of the full VLSI chip" },
-      { src: spikeOutput, caption: "Final neuron output" },
+      { src: spikeBlock, caption: "Signal chain for one electrode channel (repeated for all four)" },
+      { src: spikeElectrodes, caption: "Raw tetrode recordings, electrode channels 1–4 (MATLAB)" },
+      { src: spikeFft, caption: "Amplitude spectrum of electrode channel 1 used to set the filter passband" },
+      { src: spikeFilterResponse, caption: "Simulated frequency response of the band-pass filter" },
+      { src: spikeFiltered, caption: "Electrode channel 2 before (red) and after (blue) filtering" },
+      { src: spikePeakDetector, caption: "Peak-detector schematic with output buffer" },
+      { src: spikeSampleHold, caption: "Sample-and-hold output for electrode 1 with teacher signals" },
+      { src: spikeBump, caption: "Bump circuit comparing sampled and stored amplitudes" },
+      { src: spikeWta, caption: "Six-input winner-take-all circuit" },
+      { src: spikeOutput, caption: "Digital outputs for the six neurons during training and test" },
+      { src: spikeChip, caption: "Top-level schematic of the complete system" },
     ],
     links: [
       {
@@ -515,6 +573,7 @@ export const skills: { group: string; items: string[] }[] = [
       "Post-layout verification",
       "Sample-and-hold, comparators",
       "Analog VLSI",
+      "Subthreshold & Gm-C circuits",
     ],
   },
   {
@@ -532,6 +591,8 @@ export const skills: { group: string; items: string[] }[] = [
     items: [
       "Cadence Virtuoso",
       "TSMC 180 nm PDK",
+      "SkyWater SKY130 PDK",
+      "Xschem / ngspice",
       "COMSOL Multiphysics",
       "MATLAB",
     ],
