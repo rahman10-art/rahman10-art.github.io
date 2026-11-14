@@ -32,11 +32,16 @@ import spikeBlock from "@/assets/spike/block-diagram.png";
 import spikeSchematic from "@/assets/spike/vlsi-schematic.png";
 import spikeOutput from "@/assets/spike/neuron-output.png";
 
-import fcConcept from "@/assets/fructocare/concept.png";
-import fcSchematic from "@/assets/fructocare/system-schematic.png";
-import fcAssembly from "@/assets/fructocare/capsule-assembly.png";
+import fcFinalAssembly from "@/assets/fructocare/final-assembly.png";
+import fcProcessFlow from "@/assets/fructocare/process-flow.png";
+import fcBlockDiagram from "@/assets/fructocare/block-diagram.png";
+import fcPcbStack from "@/assets/fructocare/pcb-stack.png";
 import fcPcbAfe from "@/assets/fructocare/pcb-afe.png";
 import fcPcbMcu from "@/assets/fructocare/pcb-mcu.png";
+import fcBattery from "@/assets/fructocare/battery-connection.png";
+import fcSensorFfc from "@/assets/fructocare/sensor-ffc.png";
+import fcDrugDelivery from "@/assets/fructocare/drug-delivery-connection.png";
+import fcDimensions from "@/assets/fructocare/capsule-dimensions.png";
 
 import otaTransistor from "@/assets/ota/transistor-schematic.png";
 import otaCadence from "@/assets/ota/cadence-schematic.png";
@@ -328,42 +333,102 @@ export const projects: Project[] = [
       "FructoCare: Ingestible Capsule for Autonomous Regulation of Fructose Absorption",
     shortTitle: "FructoCare Ingestible Capsule",
     category: "Hardware",
+    affiliation:
+      "ENEE 605 · University of Maryland · Fall 2024 · Electronics lead on a 5-person team",
     summary:
-      "Electronics for an ingestible capsule that senses fructose in the small intestine and releases a GLUT5 inhibitor through an electrostatic microvalve — built on a custom rigid-flex PCB.",
-    cover: fcAssembly,
+      "As electronics lead, I designed the sensing and control electronics for an ingestible capsule that measures fructose in the small intestine and doses a GLUT5 inhibitor through a 75 V electrostatic microvalve — on a custom 8.5 mm rigid-flex PCB.",
+    cover: fcFinalAssembly,
     tags: [
       "Rigid-Flex PCB",
+      "Component Selection",
+      "Amperometric AFE",
+      "Low-Power MCU",
+      "Boost Converter",
+      "Power Budgeting",
       "Biomedical Devices",
-      "Sensor AFE",
-      "MCU",
-      "Power Management",
     ],
     metrics: [
-      { value: "8.5 mm", label: "Capsule diameter" },
-      { value: "Rigid-flex", label: "Custom PCB stack" },
-      { value: "Closed-loop", label: "Sense → dose control" },
+      { value: "8.5 mm", label: "Rigid-flex PCB diameter" },
+      { value: "3 V → 75 V", label: "Boost for microvalve drive" },
+      { value: "≈24.5 / 28 mAh", label: "Worst-case charge vs. capacity" },
+      { value: "000", label: "Capsule size (26.1 × 10 mm)" },
     ],
     sections: [
       {
         heading: "Motivation",
         paragraphs: [
-          "Unregulated fructose consumption is linked to obesity. GLUT5 is the protein responsible for fructose absorption in the body, and GLUT5 inhibitors have been identified as a possible route of treatment. FructoCare is an ingestible device that autonomously limits fructose absorption during high-sugar meals.",
+          "Unregulated fructose consumption is linked to obesity, insulin resistance and fatty liver disease. Fructose is absorbed in the small intestine by the GLUT5 transporter, and GLUT5 inhibitors have been identified as a possible treatment — but there is no technology that measures fructose inside the gut and regulates its absorption.",
+          "FructoCare is an ingestible capsule, taken with a high-sugar meal, that senses luminal fructose with a flexible electrochemical sensor and releases a controlled dose of MSNBA (a selective GLUT5 inhibitor) from an elastic PDMS reservoir through an electrostatic microvalve.",
         ],
       },
       {
-        heading: "System design",
+        heading: "My role: electronics lead",
         paragraphs: [
-          "The capsule contains a custom rigid-flex printed circuit board that reads a flexible fructose sensor designed to operate in the small intestine. The PCB stack includes a sensor analog front-end, microcontroller, regulator, converter and a reed switch for activation, powered by on-board batteries.",
-          "The board drives an electrostatic microvalve on an elastic balloon reservoir containing MSNBA, a GLUT5 inhibitor. Based on the sensed fructose concentration, the controller releases a precise dose — regulating absorption while limiting malabsorption.",
+          "The project was split into five areas — packaging, fructose sensing, drug delivery, electronics and systems integration — each with a lead. I owned the electronics: selecting components, designing the readout and control architecture, laying out the rigid-flex PCB and budgeting power for the capsule.",
+        ],
+      },
+      {
+        heading: "Signal chain",
+        steps: [
+          {
+            title: "Power-on",
+            body: "A magnetic reed switch turns the capsule on when it is removed from its magnetic holder, connecting two series silver-oxide cells to a low-noise 3 V regulator that supplies every component.",
+          },
+          {
+            title: "Sensing",
+            body: "An amperometric analog front-end connects to the sensor's working, counter and reference electrodes through a flat-flex connector, amplifies the sensor current and digitizes it with a 16-bit ADC.",
+          },
+          {
+            title: "Control",
+            body: "The microcontroller reads the AFE over I²C and runs the dosing algorithm, mapping fructose concentration to a PWM duty cycle that sets how long the valve stays open.",
+          },
+          {
+            title: "Actuation",
+            body: "The PWM signal drives a CMOS analog switch into a boost converter that steps 3 V up to the ~75 V needed to open the electrostatic microvalve, releasing a controlled dose.",
+          },
+        ],
+      },
+      {
+        heading: "Rigid-flex PCB",
+        paragraphs: [
+          "Every part had to fit inside a standard 000 capsule. I designed two 4-layer, 1.5 mm-thick circular FR-4 boards, 8.5 mm in diameter. The top board carries the reed switch and sensor FFC, with the AFE underneath for a short sensor path; the bottom board carries the MCU and regulator on top and the boost converter and analog switch below.",
+          "The two silver-oxide cells are sandwiched between the boards to save space, and polyimide flex cables with 35 µm copper traces carry power, ground and I²C between them. The flex section also lets the battery pins, sensor and drug-delivery module align and plug in during final assembly.",
+        ],
+      },
+      {
+        heading: "Power budget",
+        paragraphs: [
+          "To size the battery, I computed each component's charge consumption in its active and sleep modes for a worst case: continuous sensing for the ~4 hours the capsule spends in the small intestine, plus 30 minutes of drug delivery. The worst-case total is about 24.5 mAh — within the 28 mAh capacity of the series SR626 cells. Switching to intermittent sensing, with the AFE and MCU sleeping between measurements, would cut consumption substantially.",
+        ],
+      },
+    ],
+    tables: [
+      {
+        caption: "Component selection",
+        columns: ["Function", "Part", "Size"],
+        rows: [
+          ["Sensor analog front-end", "Nisshinbo NJU9101", "4 × 4 mm"],
+          ["Microcontroller", "TI MSPM0C1104", "3 × 3 mm"],
+          ["Valve switch", "TI SN4599-Q1 (CMOS analog switch)", "2.9 × 2.8 mm"],
+          ["3 V regulator", "ADI/Linear LT1761 (low-noise LDO)", "2.9 × 2.8 mm"],
+          ["High-voltage boost", "ADI/Linear LT3482 (90 V)", "3 × 3 mm"],
+          ["Power-on switch", "Standex-Meder MK24 reed switch", "5 × 2.2 mm"],
+          ["Battery", "2 × Seiko SR626 silver-oxide (series)", "6.8 × 2.6 mm each"],
+          ["Sensor interface", "Flat-flex connector, 0.5 mm pitch", "—"],
         ],
       },
     ],
     figures: [
-      { src: fcConcept, caption: "Device concept and control flow in the small intestine" },
-      { src: fcSchematic, caption: "System-level electronics schematic" },
-      { src: fcAssembly, caption: "Capsule electronics stack (8.5 mm diameter)" },
-      { src: fcPcbAfe, caption: "Rigid-flex PCB: reed switch, FFC and sensor AFE" },
-      { src: fcPcbMcu, caption: "Rigid-flex PCB: regulator, MCU, converter and switch" },
+      { src: fcFinalAssembly, caption: "Capsule assembly: batteries, rigid-flex PCB, sensor and drug-delivery module inside the shell" },
+      { src: fcBlockDiagram, caption: "Electronics block diagram: reed switch, regulator, AFE, MCU, analog switch and boost converter" },
+      { src: fcPcbStack, caption: "Rigid-flex PCB stack with batteries sandwiched between the boards" },
+      { src: fcPcbAfe, caption: "Top board: reed switch, sensor FFC and AFE" },
+      { src: fcPcbMcu, caption: "Bottom board: regulator, MCU, boost converter and analog switch" },
+      { src: fcBattery, caption: "Battery integration: series cells, heat-shrink and pins into the PCB" },
+      { src: fcSensorFfc, caption: "Sensor backing design and insertion into the flat-flex connector" },
+      { src: fcDrugDelivery, caption: "Connecting the electrostatic microvalve to the PCB's high-voltage output" },
+      { src: fcProcessFlow, caption: "How the capsule works: ingestion, pH-activated sensing and controlled release" },
+      { src: fcDimensions, caption: "Capsule cross-section: 11.7 mm electronics + 13.4 mm drug delivery in a 000 shell" },
     ],
   },
   {

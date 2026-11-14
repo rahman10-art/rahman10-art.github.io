@@ -86,7 +86,9 @@ export default function Home() {
         flip
         title="Electronics for space, sensing and medicine"
         body="My work has taken me from radiation-effects analysis on a NASA cosmic-ray detector aboard the International Space Station, to harvesting energy from arcs on satellite solar panels, to custom rigid-flex PCBs for an ingestible medical capsule."
-        image={capsule.figures[0].src}
+        image={
+          (capsule.figures.find((f) => f.caption.startsWith("How the capsule works")) ?? capsule.figures[0]).src
+        }
         href="/projects/"
         cta="View projects"
       />
