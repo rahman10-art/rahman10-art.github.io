@@ -34,9 +34,9 @@ export default async function ProjectPage({
   const next = projects[(index + 1) % projects.length];
 
   return (
-    <article className="mx-auto max-w-6xl px-4 pt-10 pb-20 sm:px-6">
+    <article className="mx-auto max-w-7xl px-4 pt-28 pb-20 sm:px-8 sm:pt-36">
       <Link
-        href="/#projects"
+        href="/projects/"
         className="font-mono text-xs uppercase tracking-wider text-muted hover:text-accent"
       >
         ← All projects
@@ -47,7 +47,7 @@ export default async function ProjectPage({
         <p className="font-mono text-xs uppercase tracking-wider text-accent">
           {String(index + 1).padStart(2, "0")} · {project.category}
         </p>
-        <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+        <h1 className="mt-3 text-4xl font-light leading-[1.08] tracking-tight sm:text-6xl">
           {project.title}
         </h1>
         {project.affiliation && (
@@ -69,7 +69,7 @@ export default async function ProjectPage({
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-bg transition hover:opacity-85"
+                className="rounded-full bg-ink px-6 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-bg transition hover:opacity-85"
               >
                 {l.label} ↗
               </a>
@@ -95,7 +95,7 @@ export default async function ProjectPage({
         <div className="space-y-12">
           {project.sections.map((s) => (
             <section key={s.heading}>
-              <h2 className="text-xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-light tracking-tight">
                 {s.heading}
               </h2>
               {s.paragraphs?.map((p, i) => (
@@ -138,7 +138,7 @@ export default async function ProjectPage({
 
           {project.tables?.map((t) => (
             <section key={t.caption}>
-              <h2 className="text-xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-light tracking-tight">
                 {t.caption}
               </h2>
               <div className="mt-4 overflow-x-auto rounded-xl border border-line bg-surface">
@@ -210,14 +210,14 @@ export default async function ProjectPage({
 
       {/* ---------- Next ---------- */}
       <Link
-        href={`/projects/${next.slug}`}
+        href={`/projects/${next.slug}/`}
         className="group mt-20 flex items-center justify-between gap-6 rounded-xl border border-line bg-surface p-6 transition hover:border-accent/50"
       >
         <div>
           <p className="font-mono text-xs uppercase tracking-wider text-faint">
             Next project
           </p>
-          <p className="mt-1 text-lg font-semibold">{next.shortTitle}</p>
+          <p className="mt-1 text-2xl font-light tracking-tight">{next.shortTitle}</p>
         </div>
         <span className="text-2xl text-accent transition group-hover:translate-x-1">
           →

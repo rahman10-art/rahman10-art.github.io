@@ -1,48 +1,104 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { profile } from "@/data/content";
 
 const nav = [
-  { href: "/#projects", label: "Projects" },
-  { href: "/#about", label: "About" },
-  { href: "/#skills", label: "Skills" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/about/", label: "About Me" },
+  { href: "/summary/", label: "Professional Summary" },
 ];
 
+const norm = (p: string) => (p.endsWith("/") ? p : p + "/");
+
 export default function Header() {
+  const pathname = norm(usePathname() || "/");
+  // Pages without a photo header (About, case studies) get a solid bar.
+  const hasHero =
+    pathname !== "/about/" && !/^\/projects\/[^/]+\/$/.test(pathname);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+
+  const overlay = hasHero && !scrolled && !open;
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span
-            aria-hidden
-            className="grid h-8 w-8 place-items-center rounded-md bg-ink font-mono text-xs font-semibold text-bg"
-          >
-            MR
-          </span>
-          <span className="hidden font-semibold tracking-tight sm:inline">
-            {profile.name}
-          </span>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        overlay
+          ? "bg-transparent text-white"
+          : "border-b border-line bg-bg/90 text-ink backdrop-blur-md"
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:h-20 sm:px-8">
+        <Link href="/" className="text-xl font-light tracking-tight sm:text-2xl">
+          {profile.name}
         </Link>
-        <nav className="flex items-center gap-1 text-sm">
+
+        <nav className="hidden items-center gap-7 text-sm md:flex">
+          {nav.map((n) => {
+            const active =
+              n.href === "/" ? pathname === "/" : pathname.startsWith(n.href);
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`underline-offset-[6px] transition hover:underline ${
+                  active ? "underline" : ""
+                } ${overlay ? "opacity-95" : ""}`}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+          className="-mr-2 grid h-10 w-10 place-items-center md:hidden"
+        >
+          <span className="relative block h-3 w-6">
+            <span
+              className={`absolute left-0 block h-px w-6 bg-current transition ${
+                open ? "top-1.5 rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute left-0 block h-px w-6 bg-current transition ${
+                open ? "top-1.5 -rotate-45" : "top-3"
+              }`}
+            />
+          </span>
+        </button>
+      </div>
+
+      {open && (
+        <nav className="border-t border-line px-4 pb-8 pt-4 md:hidden">
           {nav.map((n) => (
             <Link
               key={n.href}
               href={n.href}
-              className="hidden rounded-md px-3 py-1.5 text-muted transition hover:bg-surface hover:text-ink md:inline-block"
+              className="block py-3 text-2xl font-light tracking-tight"
             >
               {n.label}
             </Link>
           ))}
-          <a
-            href={profile.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-2 rounded-md bg-ink px-3.5 py-1.5 font-medium text-bg transition hover:opacity-85"
-          >
-            Résumé
-          </a>
         </nav>
-      </div>
+      )}
     </header>
   );
 }

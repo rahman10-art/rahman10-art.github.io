@@ -5,6 +5,17 @@
 import type { StaticImageData } from "next/image";
 
 import headshot from "@/assets/headshot.jpg";
+import earthrise from "@/assets/hero/earthrise.jpg";
+import moonwalk from "@/assets/hero/moonwalk.jpg";
+
+/** Full-width photos used behind page headers and the closing banner */
+export const heroImages = {
+  home: earthrise,
+  summary: moonwalk,
+  projects: creamInstrument,
+  about: earthrise,
+  banner: moonwalk,
+};
 
 import tegTripleJunction from "@/assets/teg/triple-junction.png";
 import tegArcResponse from "@/assets/teg/arc-response.png";
@@ -53,6 +64,13 @@ export const profile = {
     "I am a third-year Ph.D. student in Electrical and Electronics Engineering at the University of Maryland, College Park, specializing in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits for biomedical, sensing and space-exploration applications.",
     "I am particularly drawn to electronics for spaceborne instrumentation — payloads, particle detectors and CubeSats. That interest started as a teenager watching the Apollo 11 landing and visiting the only observatory in my hometown of Dhaka, Bangladesh, and it carried me through undergraduate space-research projects into my doctoral work.",
     "Beyond space systems, I enjoy working across domains: from transistor-level amplifier layout to custom PCBs for ingestible medical devices, and from radiation-effects analysis on the International Space Station to neuromorphic VLSI.",
+  ],
+  /** Longer personal statement shown on the About page */
+  statement: [
+    "My research spans analog, mixed-signal and VLSI design in applications such as biomedical sensing, wireless sensing and space exploration. I have a particularly strong interest in electronics and integrated-circuit systems for spaceborne instrumentation, payloads and particle detectors, as well as space missions and CubeSat design.",
+    "That interest began when I was a teenager. I remember being captivated by documentaries like Journey to the Edge of the Universe and by the historic Apollo 11 Moon landing on National Geographic — Neil Armstrong's words, \"That's one small step for man, one giant leap for mankind,\" still resonate with me as powerfully as they did the first time I heard them. My curiosity deepened when I visited the only space observatory in my hometown of Dhaka, Bangladesh. Standing under its dome, I wanted to understand the creation and evolution of the cosmos, and the potential for life across its planets, moons and galaxies — firsthand.",
+    "Driven by that, I worked on space-exploration projects throughout my undergraduate studies in electronics engineering, where I found my focus: analog integrated circuits and electronic systems for the instruments and detectors used in planetary exploration, astrophysics and astronomy. I continue to pursue this through my doctoral research.",
+    "I also love exploring other domains in electrical engineering — in particular, analog and mixed-signal circuits for biomedical sensing and implantable technologies.",
   ],
   interests: [
     "Analog IC design",

@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f6f6f3;
+  --bg: #f4f3f1;
   --surface: #ffffff;
-  --ink: #15171c;
-  --muted: #5a606c;
-  --faint: #8a8f99;
-  --line: #e2e2dc;
-  --accent: #1d4ed8;
-  --accent-soft: #e6ecfb;
-  --grid: rgba(21, 23, 28, 0.045);
+  --ink: #28211e;
+  --muted: #5e5753;
+  --faint: #8c8580;
+  --line: #e1ded9;
+  --accent: #1f4fbf;
+  --accent-soft: #e4eafa;
+  --pill: #8fd8bd; /* mint call-to-action used on photo banners */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0c0e12;
-    --surface: #13161c;
-    --ink: #e7e9ee;
-    --muted: #a0a6b2;
-    --faint: #6f7682;
-    --line: #252a33;
-    --accent: #7ea3ff;
-    --accent-soft: #18213a;
-    --grid: rgba(231, 233, 238, 0.035);
+    --bg: #111012;
+    --surface: #1a191c;
+    --ink: #ece9e6;
+    --muted: #aaa49f;
+    --faint: #77716c;
+    --line: #2b292d;
+    --accent: #8aa9ff;
+    --accent-soft: #1d2236;
+    --pill: #8fd8bd;
   }
 }
 
@@ -35,6 +35,7 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-pill: var(--pill);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -46,10 +47,6 @@ html {
 
 body {
   background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 32px 32px;
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

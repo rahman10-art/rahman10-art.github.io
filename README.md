@@ -18,6 +18,7 @@ Everything on the site comes from **`src/data/content.ts`**:
 - `profile` — name, headline, bio, links (email, LinkedIn, résumé)
 - `projects` — each project's summary, key metrics, sections, tables and figures
 - `publications`, `skills`
+- `heroImages` — the photos behind page headers and the closing banner
 
 To add a project: put its images in `src/assets/<project>/`, import them at the
 top of `content.ts`, and add an entry to the `projects` array. A case-study
@@ -28,11 +29,14 @@ page is generated automatically at `/projects/<slug>/`.
 ```
 src/
   app/
-    page.tsx                 Home page (hero, projects, about, skills, contact)
+    page.tsx                 Home (photo header, intro blocks, project walk-through)
+    projects/page.tsx        Projects grid
     projects/[slug]/page.tsx Project case-study page
+    about/page.tsx           About Me + personal statement
+    summary/page.tsx         Professional Summary (highlights, publications, skills)
     layout.tsx, globals.css  Shell, fonts, theme (light + dark)
-  components/                Header, Footer, ProjectCard, Tag, SectionHeading
-  data/content.ts            ← all site content
+  components/                Header, Footer, PageHero, CtaBanner, Pill, Tag
+  data/content.ts            ← all site content (incl. which photos go behind page headers)
   assets/                    Images
 .github/workflows/deploy.yml Builds and deploys to GitHub Pages on push to main
 ```
