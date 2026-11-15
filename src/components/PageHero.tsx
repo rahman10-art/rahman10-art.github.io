@@ -9,7 +9,8 @@ export default function PageHero({
   align = "left",
 }: {
   image: StaticImageData;
-  title: React.ReactNode;
+  /** Large heading. When omitted, the subtitle becomes the page heading. */
+  title?: React.ReactNode;
   subtitle?: React.ReactNode;
   children?: React.ReactNode;
   size?: "md" | "lg";
@@ -41,24 +42,30 @@ export default function PageHero({
           align === "center" ? "text-center" : ""
         }`}
       >
-        <h1
-          className={`font-light leading-[1.08] tracking-tight ${
-            size === "lg"
-              ? "max-w-4xl text-4xl sm:text-6xl lg:text-7xl"
-              : "text-4xl sm:text-6xl"
-          } ${align === "center" ? "mx-auto" : ""}`}
-        >
-          {title}
-        </h1>
-        {subtitle && (
-          <p
-            className={`mt-5 max-w-2xl text-lg font-light text-white/85 sm:text-xl ${
-              align === "center" ? "mx-auto" : ""
-            }`}
+        {title && (
+          <h1
+            className={`font-light leading-[1.08] tracking-tight ${
+              size === "lg"
+                ? "max-w-4xl text-4xl sm:text-6xl lg:text-7xl"
+                : "text-4xl sm:text-6xl"
+            } ${align === "center" ? "mx-auto" : ""}`}
           >
-            {subtitle}
-          </p>
+            {title}
+          </h1>
         )}
+        {subtitle &&
+          (() => {
+            const Tag = title ? "p" : "h1";
+            return (
+              <Tag
+                className={`max-w-2xl text-lg font-light text-white/85 sm:text-xl ${
+                  title ? "mt-5" : ""
+                } ${align === "center" ? "mx-auto" : ""}`}
+              >
+                {subtitle}
+              </Tag>
+            );
+          })()}
         {children && (
           <div
             className={`mt-9 flex flex-wrap gap-3 ${

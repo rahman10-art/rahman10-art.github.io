@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 /** The three projects highlighted on this page, in order. */
-const highlightSlugs = ["ota-design", "iss-cream-pedestal", "fructocare-capsule"];
+const highlightSlugs = ["spike-sorting-vlsi", "iss-cream-pedestal", "fructocare-capsule"];
 
 export default function SummaryPage() {
   const highlights = highlightSlugs

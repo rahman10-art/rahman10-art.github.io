@@ -51,9 +51,6 @@ import fcSensorFfc from "@/assets/fructocare/sensor-ffc.png";
 import fcDrugDelivery from "@/assets/fructocare/drug-delivery-connection.png";
 import fcDimensions from "@/assets/fructocare/capsule-dimensions.png";
 
-import otaTransistor from "@/assets/ota/transistor-schematic.png";
-import otaCadence from "@/assets/ota/cadence-schematic.png";
-import otaLayout from "@/assets/ota/layout.png";
 
 /* ------------------------------------------------------------------ */
 /* Profile                                                             */
@@ -74,9 +71,9 @@ export const profile = {
   location: "College Park, MD",
   seeking: "Open to analog / mixed-signal IC and hardware internships",
   about: [
-    "I am a third-year Ph.D. student in Electrical and Electronics Engineering at the University of Maryland, College Park, specializing in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits for biomedical, sensing and space-exploration applications.",
+    "I am a fourth-year Ph.D. student in Electrical and Electronics Engineering at the University of Maryland, College Park, specializing in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits for biomedical, sensing and space-exploration applications.",
     "My primary interest is electronics for spaceborne instrumentation, including payloads, particle detectors and CubeSats. This interest began with my early exposure to space science in Dhaka, Bangladesh, and has guided my work from undergraduate space-research projects through my doctoral research.",
-    "My project experience spans several areas of electrical engineering: transistor-level amplifier design and layout, rigid-flex PCB design for ingestible medical devices, radiation-effects analysis for an instrument aboard the International Space Station, and analog VLSI for neural-signal processing.",
+    "My project experience spans several areas of electrical engineering: analog VLSI for neural-signal processing, rigid-flex PCB design for ingestible medical devices, radiation-effects analysis for an instrument aboard the International Space Station, and energy harvesting from electrostatic arcing on satellite solar arrays.",
   ],
   /** Longer personal statement shown on the About page */
   statement: [
@@ -130,92 +127,6 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  {
-    slug: "ota-design",
-    title:
-      "Low-Power Single-Stage Operational Transconductance Amplifier (OTA)",
-    shortTitle: "Low-Power OTA — TSMC 180 nm",
-    category: "IC Design",
-    summary:
-      "End-to-end design of a single-stage, single-ended OTA in Cadence Virtuoso: schematic, simulation, common-centroid layout and post-layout verification, meeting all specifications at 72.5 µW.",
-    cover: otaLayout,
-    tags: [
-      "Cadence Virtuoso",
-      "TSMC 180 nm",
-      "Analog Layout",
-      "Post-Layout Sim",
-      "Common-Centroid",
-    ],
-    metrics: [
-      { value: "47.9 dB", label: "DC gain (spec ≥ 40 dB)" },
-      { value: "72.6°", label: "Phase margin (spec ≥ 60°)" },
-      { value: "72.5 µW", label: "Power (spec < 100 µW)" },
-      { value: "11.9 MHz", label: "Unity-gain bandwidth" },
-    ],
-    sections: [
-      {
-        heading: "Overview",
-        paragraphs: [
-          "This project covered the full analog design flow for a low-power single-stage operational transconductance amplifier: schematic design, simulation, layout and post-layout verification in Cadence Virtuoso using the TSMC 180 nm process. The goal was to meet strict analog performance specifications while staying robust against layout parasitics.",
-        ],
-      },
-      {
-        heading: "Design approach",
-        paragraphs: [
-          "I designed a fully symmetric OTA with matched transistor pairs to ensure proper differential operation and minimize mismatch.",
-        ],
-        bullets: [
-          "Careful biasing to achieve high gain under a tight power budget",
-          "Pole placement and compensation for stability (phase margin > 60°)",
-          "Explicit trade-offs between gain, bandwidth and power consumption",
-        ],
-      },
-      {
-        heading: "Layout strategy",
-        bullets: [
-          "Common-centroid (ABBA) layout for critical transistor pairs",
-          "Fully symmetric placement to minimize systematic mismatch",
-          "Compact routing to reduce parasitic capacitance",
-          "Area optimization (~1916 µm²) while preserving matching integrity",
-        ],
-      },
-      {
-        heading: "Outcome",
-        paragraphs: [
-          "Every specification was met both before and after parasitic extraction. Post-layout results tracked pre-layout within 0.3 MHz of bandwidth and 0.2° of phase margin, confirming the layout introduced minimal degradation.",
-        ],
-      },
-    ],
-    tables: [
-      {
-        caption: "Design specifications",
-        columns: ["Parameter", "Target"],
-        rows: [
-          ["DC gain", "≥ 40 dB"],
-          ["Phase margin", "≥ 60°"],
-          ["Load capacitance", "1 pF"],
-          ["Power consumption", "< 100 µW"],
-          ["Supply voltage", "1.8 V"],
-        ],
-      },
-      {
-        caption: "Measured results",
-        columns: ["Metric", "Pre-layout", "Post-layout"],
-        rows: [
-          ["DC gain", "47.93 dB", "47.91 dB"],
-          ["Unity-gain bandwidth", "12.18 MHz", "11.91 MHz"],
-          ["Phase margin", "72.8°", "72.6°"],
-          ["Power consumption", "72.6 µW", "72.5 µW"],
-          ["Area", "—", "~1916 µm²"],
-        ],
-      },
-    ],
-    figures: [
-      { src: otaTransistor, caption: "Transistor-level schematic of the differential OTA" },
-      { src: otaCadence, caption: "Schematic with test bench in Cadence Virtuoso" },
-      { src: otaLayout, caption: "Common-centroid layout in TSMC 180 nm" },
-    ],
-  },
   {
     slug: "iss-cream-pedestal",
     title:

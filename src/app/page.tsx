@@ -62,7 +62,6 @@ export default function Home() {
       <PageHero
         size="lg"
         image={heroImages.home}
-        title={<>Integrated circuits and electronic systems for biomedical sensing and space exploration.</>}
         subtitle={`${profile.name} — ${profile.title}. ${profile.role}.`}
       >
         <Pill href="/about/" variant="ghost-light">
@@ -75,7 +74,7 @@ export default function Home() {
 
       <Feature
         title="Analog & mixed-signal integrated circuits"
-        body="I am a third-year Ph.D. student at the University of Maryland, College Park, majoring in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits, from transistor-level amplifiers to complete analog VLSI systems, for biomedical, sensing and space-exploration applications."
+        body="I am a fourth-year Ph.D. student at the University of Maryland, College Park, majoring in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits, from transistor-level circuit blocks to complete analog VLSI systems, for biomedical, sensing and space-exploration applications."
         image={profile.photo}
         photo
         href="/about/"
