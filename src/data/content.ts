@@ -292,10 +292,10 @@ export const projects: Project[] = [
       "Low-Power Mixed-Signal",
     ],
     metrics: [
-      { value: "0.9 / 0.6 V", label: "Comparator trip points (VH / VL)" },
+      { value: "0.9 / 0.6 V", label: "Comparator trip points, matching the original chip" },
       { value: "≈ 20 mV", label: "Post-layout shift in trip points" },
       { value: "≈ 522 kHz", label: "Ring-oscillator clock, within 0.2 kHz after PEX" },
-      { value: "−25 dBm", label: "Rectifier sensitivity (system result)" },
+      { value: "−25 vs −31 dBm", label: "Sensitivity: redesign (simulated) vs. original (measured)" },
     ],
     sections: [
       {
@@ -303,6 +303,12 @@ export const projects: Project[] = [
         paragraphs: [
           "This project redesigned the battery-free 5G energy-harvester and backscatter chip reported by Yildirim et al. (MIT and Ericsson Research, IEEE Journal of Solid-State Circuits, 2025). The original 3.5 GHz chip, fabricated in TSMC 65 nm CMOS for IoT-enabled warehouses, harvests RF energy with a rectifier, uses a hysteresis comparator in its power-management unit to switch between harvesting and communication, and transmits data through a PTAT-biased backscatter block with an on-chip ring-oscillator clock and self-clocked encoding.",
           "Our team re-implemented this architecture in 180 nm CMOS and adapted it for robustness to antenna detuning, which occurs when a tag's placement changes the antenna's effective electrical length. In place of the original loop antenna and cross-coupled rectifier, we co-designed a single-port planar inverted-F antenna with a 24-transistor Dickson rectifier and an RF-tunable capacitor array for multiband (2.4–7 GHz) matching. The redesigned rectifier reached −25 dBm sensitivity and 8.2% power-conversion efficiency after parasitic extraction.",
+        ],
+      },
+      {
+        heading: "Motivation",
+        paragraphs: [
+          "The main goal of the project was to determine how closely a state-of-the-art published energy harvester could be reproduced in an older, more accessible 180 nm process. We used the original chip's reported specifications as design targets, matched its power-management and backscatter architecture block by block, and compared our post-layout simulation results against its measured performance to identify which specifications carry over across process nodes and which do not.",
         ],
       },
       {
@@ -328,9 +334,37 @@ export const projects: Project[] = [
         ],
       },
       {
+        heading: "Comparison with the original chip",
+        bullets: [
+          "Matched: the power-management control behavior. Our hysteresis comparator reproduces the original chip's 0.9 V and 0.6 V switching thresholds and held them within about 20 mV after layout, with the same 10 nF storage capacitor.",
+          "Matched in architecture: like the original, the backscatter block avoids a power-hungry LDO by biasing a ring-oscillator clock with a PTAT current reference, uses self-clocked Manchester encoding and transmits by on-off keying through an antenna switch, with a voltage limiter for overvoltage protection.",
+          "Differed: rectifier sensitivity. The redesign reached −25 dBm in post-layout simulation, compared with −31 dBm measured for the original, a gap of about 6 dB. Expected contributors include the higher threshold voltages and parasitics of the 180 nm process and the choice of a Dickson rectifier, which interfaces directly with the single-ended PIFA without a balun but is less efficient than the original's cross-coupled rectifier.",
+          "Simplified: our encoder implements a preamble, data registers and Manchester coding, without the original's Barker-code packet identification, CRC and convolutional coding.",
+          "Not evaluated: cold-start charging time, backscatter power and over-the-air link performance, which were measured on the original fabricated chip but were outside the scope of this simulation-based redesign.",
+        ],
+      },
+      {
         heading: "Takeaways",
         paragraphs: [
-          "The project reinforced how layout decisions carry through to circuit behavior in low-power mixed-signal design. Careful matching and routing kept the comparator's trip points and the clock frequency within a few percent of their schematic targets, which is essential when the entire chip runs from harvested energy with no margin for drift.",
+          "Block-level control and timing specifications, such as the comparator thresholds and the PTAT-biased clock, transferred closely from 65 nm to 180 nm and remained stable after layout, with the trip points within about 20 mV and the clock within 0.2 kHz of their pre-layout values. RF performance did not transfer as directly: rectifier sensitivity depends strongly on device thresholds, parasitics and the antenna–rectifier interface, and was the main specification where the redesign fell short of the original. The project showed both how closely a published design can be reproduced and where process technology sets the limits.",
+        ],
+      },
+    ],
+    tables: [
+      {
+        caption: "Original chip vs. our redesign",
+        columns: ["Parameter", "Original (JSSC 2025, measured)", "Our redesign (post-layout sim.)"],
+        rows: [
+          ["Technology", "TSMC 65 nm LP CMOS", "180 nm CMOS"],
+          ["Frequency", "3.5 GHz (CBRS band)", "Multiband, 2.4–7 GHz"],
+          ["Antenna", "PCB loop antenna", "Planar inverted-F antenna"],
+          ["Rectifier", "6-stage cross-coupled", "24-transistor Dickson"],
+          ["Sensitivity", "−31 dBm for 0.9 V output", "−25 dBm (0.5 V output)"],
+          ["Comparator trip points (VH / VL)", "0.9 V / 0.6 V", "0.9 V / 0.6 V (≈ 20 mV lower post-layout)"],
+          ["Storage capacitor", "10 nF", "10 nF"],
+          ["Clock generation", "PTAT current-starved ring oscillator, no LDO", "PTAT current reference + 3-stage ring oscillator, ≈ 522 kHz"],
+          ["Data encoding", "Barker code, ID, data, CRC; convolutional + Manchester coding", "Preamble, data registers, PISO; Manchester coding"],
+          ["Cold-start time", "≈ 19–20 s at −31 dBm", "Not evaluated"],
         ],
       },
     ],
