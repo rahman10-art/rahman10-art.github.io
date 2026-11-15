@@ -24,9 +24,14 @@ import tegArcCurrentTemp from "@/assets/teg/arc-current-temp.png";
 
 import creamScd from "@/assets/cream/scd.jpg";
 import creamInstrument from "@/assets/cream/instrument.jpg";
-import creamPedestalMean from "@/assets/cream/pedestal-mean.png";
-import creamChannelPedestal from "@/assets/cream/channel-pedestal.png";
 import creamCmsLeakage from "@/assets/cream/cms-leakage.png";
+import creamDetectorPedestals from "@/assets/cream/detector-pedestals.png";
+import creamReadoutChain from "@/assets/cream/readout-chain.png";
+import creamNiel from "@/assets/cream/niel-displacement.png";
+import creamScdLayout from "@/assets/cream/scd-layout.png";
+import creamChannelFit from "@/assets/cream/channel-fit.png";
+import creamSlopeHistogram from "@/assets/cream/slope-histogram.png";
+import creamBoardRates from "@/assets/cream/board-rates.png";
 
 import spikeBlock from "@/assets/spike/block-diagram.png";
 import spikeElectrodes from "@/assets/spike/electrode-signals.png";
@@ -130,54 +135,89 @@ export const projects: Project[] = [
   {
     slug: "iss-cream-pedestal",
     title:
-      "Radiation-Induced Pedestal Build-up on the ISS-CREAM Silicon Charge Detector",
-    shortTitle: "ISS-CREAM Radiation Effects",
+      "Investigating Pedestal Build-up in the ISS-CREAM Silicon Charge Detector",
+    shortTitle: "ISS-CREAM Pedestal Build-up",
     category: "Research",
-    affiliation: "UMD Cosmic Ray Physics Group · Supervisor: Prof. Eun-Suk Seo",
+    affiliation:
+      "UMD Cosmic Ray Physics Group · Supervisor: Prof. Eun-Suk Seo · Ongoing research",
     summary:
-      "Identified the cause of progressive pedestal (baseline offset) drift across 2,911 ADC readout channels of the ISS-CREAM cosmic-ray instrument aboard the International Space Station, attributing it to radiation-induced leakage current in the silicon sensors.",
+      "Investigating why the pedestal (baseline offset) of the Silicon Charge Detector on the ISS-CREAM cosmic-ray instrument rose steadily while in orbit on the International Space Station, through radiation-effects analysis, a review of the readout electronics and a hierarchical analysis of flight data.",
     cover: creamScd,
     tags: [
-      "Detector Electronics",
-      "Radiation Effects",
-      "ADC Readout",
-      "Data Analysis",
-      "Silicon Sensors",
+      "Radiation Effects (NIEL)",
+      "Detector Readout Electronics",
+      "Flight-Data Analysis",
+      "Linear Regression",
+      "CERN ROOT",
+      "MATLAB",
     ],
     metrics: [
-      { value: "2,911", label: "ADC readout channels analyzed" },
-      { value: "Z = 1–26", label: "Cosmic-ray charge range" },
-      { value: "ISS", label: "Flown since Aug. 2017" },
+      { value: "24 · 84", label: "Sensor ladders · ADC chips analyzed" },
+      { value: "27–60", label: "Pedestal rise across boards (ADC counts / yr)" },
+      { value: "2.2×", label: "Spread in rise rate between readout boards" },
+      { value: "2017–2019", label: "ISS-CREAM operation on the ISS" },
     ],
     sections: [
       {
         heading: "Background",
         paragraphs: [
-          "The ISS-Cosmic Ray Energetics And Mass (ISS-CREAM) instrument was built by the UMD Cosmic Ray Physics Group in collaboration with NASA to measure high-energy cosmic-ray spectra from protons to iron nuclei (Z = 1 to 26, ~10¹² to ~10¹⁵ eV). After multiple balloon missions it was launched to the International Space Station in August 2017.",
-          "A key subsystem is the Silicon Charge Detector (SCD): silicon pixel sensors, analog and digital readout electronics, and a mechanical support structure. Pedestal runs — measurements of the constant background offset on each ADC channel — are subtracted from detector output to recover the true particle signal. That baseline should stay constant over time.",
+          "The ISS-Cosmic Ray Energetics And Mass (ISS-CREAM) instrument was developed by the UMD Cosmic Ray Physics Group in collaboration with NASA to measure the elemental spectra of high-energy cosmic rays from protons to iron (Z = 1–26). After a series of balloon missions, it operated on the International Space Station from 2017 to 2019.",
+          "The Silicon Charge Detector (SCD) measures the charge of incoming particles using silicon pixel sensors read out through analog front-end electronics and ADCs. Pedestal runs, recorded every 10 minutes to 1 hour, measure the baseline offset on each readout channel, which is subtracted to recover the true particle signal. While the pedestals of the other detectors (TCD, BCD and calorimeter) stayed constant within a few tens of ADC counts, the pedestal means of both SCD layers rose steadily throughout operation.",
         ],
       },
       {
-        heading: "Problem",
-        paragraphs: [
-          "Pedestal means for both SCD layers rose steadily over the instrument's operating life, and channel-level analysis showed the same cumulative build-up. The objective was to determine whether the cause lay in the front-end readout electronics, the ADCs or the silicon sensors themselves.",
+        heading: "Research objectives",
+        bullets: [
+          "Determine the cause of the cumulative pedestal build-up observed only in the SCD.",
+          "Evaluate whether radiation-induced leakage current in the silicon sensors, caused by Non-Ionizing Energy Loss (NIEL), can explain a rise that persists through the detector's regular power cycling.",
+          "Assess alternative explanations in the readout chain, including the AC-coupling capacitors between the sensors and the front-end electronics.",
+          "Localize the effect within the detector hierarchy (quadrant, ladder, readout board, ADC chip and channel) using flight data.",
         ],
       },
       {
-        heading: "Investigation",
+        heading: "Approach",
+        steps: [
+          {
+            title: "Radiation-effects analysis",
+            body: "Studied NIEL displacement damage in silicon, where the increase in bulk leakage current scales with the 1 MeV-equivalent hadron fluence (ΔI = α·Φeq·V). Reviewed evidence from the CMS and ATLAS pixel detectors, proton-irradiation tests of silicon drift detectors for ESA's LOFT mission, SiPMs for NASA missions and Hamburg-model predictions for Mars, and compared their radiation environments with the ISS orbit (370–460 km, 51.6° inclination).",
+          },
+          {
+            title: "Readout-electronics review",
+            body: "Examined the SCD's AC-coupled front end (33 nF, 630 V X7R multilayer ceramic coupling capacitors, followed by a preamplifier and pulse shaper) and evaluated capacitor degradation mechanisms, including voltage stress, rated lifetime and dielectric aging, as possible sources of the build-up.",
+          },
+          {
+            title: "Hierarchical flight-data analysis",
+            body: "Mapped the 2017 pedestal data onto the detector structure (four quadrants, 24 ladders, readout (ACP) boards of seven ADCs each and 84 ADC chips of 32 channels), plotted daily, monthly and yearly trends, and fitted a linear regression to every channel to extract its rate of pedestal rise. Compared the distributions of these rates across ADC chips, ladders and boards using CERN ROOT and MATLAB.",
+          },
+        ],
+      },
+      {
+        heading: "Key findings",
+        bullets: [
+          "The pedestal rise is cumulative and present in every quadrant, ladder and ADC chip examined, with similar month-to-month behavior across channels, including a common drop in pedestal RMS in October 2017.",
+          "The rate of rise differs systematically between readout boards: the four ACP boards analyzed averaged 27.0, 31.4, 48.9 and 59.7 ADC counts per year, a spread of more than 2×.",
+          "Within each board, the seven ADC chips show smaller but measurable differences (for example, 24–29 counts per year on board 1 and 57–65 on board 4).",
+          "Because the sensors are AC-coupled, DC leakage current should be blocked before the readout, and the pedestal noise did not increase alongside the mean. Both observations argue against sensor leakage current alone as the cause.",
+        ],
+      },
+      {
+        heading: "Takeaways",
         paragraphs: [
-          "I first examined electronic failure modes in the readout chain — ADC offset errors, leakage currents and similar effects. None of these accounted for the observed behavior. The SCD is power-cycled multiple times every hour, so any purely electrical noise would be reset; the underlying cause therefore had to persist through power cycling and accumulate over time.",
-          "This pointed to the sensors themselves. I concluded that the pedestal growth was driven by rising leakage current in the silicon pixel sensors due to Non-Ionizing Energy Loss (NIEL): high-energy hadrons in the space radiation environment displace atoms from the silicon lattice, creating defects that migrate over time and increase the sensor's leakage current in proportion to accumulated particle fluence.",
-          "This mechanism is consistent with displacement damage observed elsewhere — for example, the steady increase in leakage current of silicon pixel detectors in the CMS experiment at CERN's LHC.",
+          "NIEL-induced leakage current is a well-documented, cumulative effect that is unaffected by power cycling, making it a strong initial hypothesis. However, the AC-coupled readout and the board-to-board variation in rise rate indicate that the build-up depends on the readout boards or their location in the detector, not only on the sensors. Ongoing work focuses on correlating the rise rates with board-level parameters and quantifying the uncertainty of the fitted rates to isolate the source.",
         ],
       },
     ],
     figures: [
       { src: creamScd, caption: "Silicon Charge Detector (SCD) module" },
       { src: creamInstrument, caption: "ISS-CREAM instrument during integration" },
-      { src: creamPedestalMean, caption: "Pedestal-mean variation over time for SCD1/SCD2" },
-      { src: creamChannelPedestal, caption: "Pedestal drift on individual ADC readout channels" },
-      { src: creamCmsLeakage, caption: "Measured vs. predicted leakage current, CMS layer-1 modules (CERN)" },
+      { src: creamDetectorPedestals, caption: "Pedestal-mean history of the ISS-CREAM detectors: only SCD1/SCD2 (d) rise steadily (Yoon et al.)" },
+      { src: creamReadoutChain, caption: "AC-coupled SCD readout: detector bias, coupling capacitor, preamplifier and pulse shaper" },
+      { src: creamNiel, caption: "Displacement-damage process in the silicon lattice underlying NIEL (after Todd & Uznanski, CERN)" },
+      { src: creamCmsLeakage, caption: "Measured vs. predicted NIEL leakage current in CMS layer-1 pixel modules (CERN)" },
+      { src: creamScdLayout, caption: "SCD layout: 24 ladders, readout (ACP) boards of seven ADCs, 16 channels per sensor" },
+      { src: creamChannelFit, caption: "Linear fit of pedestal mean over time for a single channel" },
+      { src: creamSlopeHistogram, caption: "Distribution of channel rise rates for ADC chips on ACP board 1" },
+      { src: creamBoardRates, caption: "Mean rise rate per ADC chip (with error bars) on four ACP boards" },
     ],
   },
   {
