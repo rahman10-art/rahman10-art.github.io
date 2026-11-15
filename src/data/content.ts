@@ -172,7 +172,7 @@ export const projects: Project[] = [
         heading: "Overview",
         paragraphs: [
           "Millimeter-wave FMCW radars for automotive sensing, drone surveillance and collision avoidance rely on large antenna arrays and beamforming to overcome severe path loss. As arrays grow for finer angular resolution, the power spent on beam scanning, RF front-end circuitry and data conversion becomes a central design constraint.",
-          "This work is part of CogniSense, one of seven centers in the Semiconductor Research Corporation's JUMP 2.0 program, sponsored by DARPA. My research analyzes radar power at both the system level (scanning strategy and beamforming architecture) and the circuit level (transmitter and receiver components), and is summarized in two manuscripts.",
+          "This work is part of CogniSense, one of seven centers in the Semiconductor Research Corporation's JUMP 2.0 program, sponsored by DARPA. My research analyzes radar power at both the system level (scanning strategy and beamforming architecture) and the circuit level (transmitter and receiver components), and is summarized in two manuscripts, one of which is under review in IEEE Transactions on Radar Systems.",
         ],
       },
       {
@@ -630,7 +630,8 @@ export const publications: { title: string; venue: string; href?: string }[] = [
   {
     title:
       "Tree Search for Power-Efficient Sparse Object Detection in FMCW Radar",
-    venue: "M. Rahman and P. Abshire · Manuscript",
+    venue:
+      "M. Rahman and P. Abshire · Under review, IEEE Transactions on Radar Systems (T-RS)",
   },
   {
     title:
