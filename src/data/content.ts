@@ -31,6 +31,14 @@ import radarBfArchitectures from "@/assets/radar/bf-architectures.png";
 import radarAfeCompression from "@/assets/radar/afe-compression.png";
 import radarBfPower from "@/assets/radar/bf-power-breakdown.png";
 import radarSnrAdc from "@/assets/radar/snr-vs-adc.png";
+import rficBlockDiagram from "@/assets/rfic/system-block-diagram.png";
+import rficComparatorSchematic from "@/assets/rfic/comparator-schematic.png";
+import rficComparatorOutput from "@/assets/rfic/comparator-output.png";
+import rficComparatorLayout from "@/assets/rfic/comparator-layout.png";
+import rficComparatorPostLayout from "@/assets/rfic/comparator-post-layout.png";
+import rficEncoderDiagram from "@/assets/rfic/encoder-block-diagram.png";
+import rficBackscatterLayout from "@/assets/rfic/backscatter-layout.png";
+import rficBackscatterOutput from "@/assets/rfic/backscatter-output.png";
 import creamScd from "@/assets/cream/scd.jpg";
 import creamInstrument from "@/assets/cream/instrument.jpg";
 import creamCmsLeakage from "@/assets/cream/cms-leakage.png";
@@ -261,6 +269,80 @@ export const projects: Project[] = [
       { src: radarAfeCompression, caption: "Analog feature extraction and compression ahead of the ADCs (inset: AFE-CIM concept from prior work)" },
       { src: radarSnrAdc, caption: "Effective SNR vs. ADC resolution under the additive quantization-noise model" },
       { src: radarBfPower, caption: "Receiver power breakdown for analog, digital and hybrid beamforming" },
+    ],
+  },
+  {
+    slug: "rf-energy-harvesting-backscatter-ic",
+    title:
+      "Batteryless RF Energy-Harvesting and Backscatter IC for RFID Tags",
+    shortTitle: "RF Energy-Harvesting & Backscatter IC",
+    category: "IC Design",
+    affiliation:
+      "ENEE 719M: Analog and Mixed-Signal Design · University of Maryland · Team of three",
+    summary:
+      "A 180 nm CMOS power-management and backscatter chip for batteryless RFID tags. I designed the hysteresis comparator that switches the chip between energy harvesting and communication, and laid out the backscatter block's reference, clock and digital control circuits.",
+    cover: rficComparatorLayout,
+    tags: [
+      "Cadence Virtuoso",
+      "180 nm CMOS",
+      "Hysteresis Comparator",
+      "Custom Layout",
+      "DRC / LVS",
+      "Post-Layout (PEX) Simulation",
+      "Low-Power Mixed-Signal",
+    ],
+    metrics: [
+      { value: "0.9 / 0.6 V", label: "Comparator trip points (VH / VL)" },
+      { value: "≈ 20 mV", label: "Post-layout shift in trip points" },
+      { value: "≈ 522 kHz", label: "Ring-oscillator clock, within 0.2 kHz after PEX" },
+      { value: "−25 dBm", label: "Rectifier sensitivity (system result)" },
+    ],
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          "Batteryless RFID tags and low-power IoT nodes must operate from very small amounts of ambient RF energy. This project co-designed the antenna and power-management electronics of an energy-harvesting tag, rather than optimizing each block in isolation, so that the rectifier is designed for the non-ideal impedance the antenna actually presents.",
+          "The system combines a planar inverted-F antenna with a 24-transistor Dickson rectifier, an RF-tunable capacitor array for multiband (2.4–7 GHz) matching, a beta-multiplier voltage reference, a hysteresis comparator, and a backscatter block that transmits tag data by modulating the antenna impedance. The rectifier reached −25 dBm sensitivity and 8.2% power-conversion efficiency after parasitic extraction.",
+        ],
+      },
+      {
+        heading: "My contributions",
+        bullets: [
+          "Designed the hysteresis comparator for the power-management unit end to end: schematic, simulation, custom layout, DRC/LVS verification and post-layout (PEX) simulation.",
+          "Created and verified custom layouts for the backscatter block, including the PTAT current reference, ring oscillator, Mod-3 counter, D flip-flops and mixed-signal control circuitry, with DRC/LVS-clean physical verification and post-layout validation.",
+        ],
+      },
+      {
+        heading: "Hysteresis comparator",
+        paragraphs: [
+          "The comparator is the central control element of the power-management unit. It monitors the voltage on the storage capacitor and toggles a PMOS switch to move the chip between the energy-harvesting phase (charging the capacitor) and the communication phase (powering the backscatter block).",
+          "The design uses a PMOS input stage, an NMOS current mirror and a PMOS load with positive feedback. The current mirror transfers the input-stage signal to the load, and the positive feedback creates the bistable behavior that sets two distinct trip points: VH = 0.9 V for the transition to communication and VL = 0.6 V for the return to harvesting. Hysteresis prevents the chip from oscillating between modes as the stored voltage fluctuates.",
+          "After layout and parasitic extraction, both trip points shifted by only about 20 mV, showing that the layout preserved the intended hysteresis window.",
+        ],
+      },
+      {
+        heading: "Backscatter block layout",
+        paragraphs: [
+          "The backscatter block transmits hard-wired tag data by on-off keying: an NMOS switch modulates the antenna impedance according to the encoded bit stream. Because the rectified supply is not constant, a PTAT current reference biases a three-stage ring oscillator to produce a stable clock, and a frequency divider built from a Mod-3 counter and D flip-flops derives the additional clocks. The digital encoder combines a preamble with data registers through a multiplexer and a parallel-in serial-out register, and Manchester-encodes the output.",
+          "In post-layout simulation, the ring-oscillator frequency moved only from 522.0 kHz to 521.8 kHz, and a glitch present in the pre-layout Manchester-encoded output did not appear after extraction.",
+        ],
+      },
+      {
+        heading: "Takeaways",
+        paragraphs: [
+          "The project reinforced how layout decisions carry through to circuit behavior in low-power mixed-signal design. Careful matching and routing kept the comparator's trip points and the clock frequency within a few percent of their schematic targets, which is essential when the entire chip runs from harvested energy with no margin for drift.",
+        ],
+      },
+    ],
+    figures: [
+      { src: rficBlockDiagram, caption: "System block diagram: energy harvester and power-management unit with the backscatter block" },
+      { src: rficComparatorSchematic, caption: "Hysteresis comparator schematic" },
+      { src: rficComparatorOutput, caption: "Simulated comparator response showing the hysteresis trip points" },
+      { src: rficComparatorLayout, caption: "Custom layout of the hysteresis comparator" },
+      { src: rficComparatorPostLayout, caption: "Post-layout (PEX) simulation of the comparator" },
+      { src: rficEncoderDiagram, caption: "Digital encoder: preamble and data registers, PISO and Manchester encoder" },
+      { src: rficBackscatterLayout, caption: "Layout of the backscatter block" },
+      { src: rficBackscatterOutput, caption: "Backscatter block waveforms: main clock, divided clocks, packet and Manchester-encoded data" },
     ],
   },
   {
@@ -667,6 +749,7 @@ export const skills: { group: string; items: string[] }[] = [
       "Sample-and-hold, comparators",
       "Analog VLSI",
       "Subthreshold & Gm-C circuits",
+      "Hysteresis comparators",
     ],
   },
   {
