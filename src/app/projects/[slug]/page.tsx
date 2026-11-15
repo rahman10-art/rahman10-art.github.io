@@ -90,6 +90,53 @@ export default async function ProjectPage({
         ))}
       </dl>
 
+      {/* ---------- Featured table ---------- */}
+      {project.featuredTable && (
+        <section className="mt-16">
+          <h2 className="text-3xl font-light tracking-tight sm:text-4xl">
+            {project.featuredTable.caption}
+          </h2>
+          {project.featuredTable.intro && (
+            <p className="mt-3 max-w-3xl leading-relaxed text-muted">
+              {project.featuredTable.intro}
+            </p>
+          )}
+          <div className="mt-6 overflow-x-auto rounded-xl border border-line bg-surface">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead className="border-b border-line bg-bg/60 font-mono text-xs uppercase tracking-wider text-faint">
+                <tr>
+                  {project.featuredTable.columns.map((c) => (
+                    <th key={c} className="px-5 py-3.5 font-medium">
+                      {c}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {project.featuredTable.rows.map((r) => (
+                  <tr key={r[0]} className="border-b border-line last:border-0">
+                    {r.map((cell, ci) => (
+                      <td
+                        key={ci}
+                        className={
+                          ci === 0
+                            ? "px-5 py-3.5 font-medium text-ink"
+                            : ci === r.length - 1
+                              ? "px-5 py-3.5 text-ink"
+                              : "px-5 py-3.5 text-muted"
+                        }
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
       {/* ---------- Body ---------- */}
       <div className="mt-16 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="space-y-12">

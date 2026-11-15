@@ -147,6 +147,8 @@ export type Project = {
   metrics: Metric[];
   sections: Section[];
   tables?: SpecTable[];
+  /** A key table shown full-width near the top of the page, below the metrics. */
+  featuredTable?: SpecTable & { intro?: string };
   figures: Figure[];
   links?: { label: string; href: string }[];
 };
@@ -312,6 +314,16 @@ export const projects: Project[] = [
         ],
       },
       {
+        heading: "Comparison with the original chip",
+        bullets: [
+          "Matched: the power-management control behavior. Our hysteresis comparator reproduces the original chip's 0.9 V and 0.6 V switching thresholds and held them within about 20 mV after layout, with the same 10 nF storage capacitor.",
+          "Matched in architecture: like the original, the backscatter block avoids a power-hungry LDO by biasing a ring-oscillator clock with a PTAT current reference, uses self-clocked Manchester encoding and transmits by on-off keying through an antenna switch, with a voltage limiter for overvoltage protection.",
+          "Differed: rectifier sensitivity. The redesign reached −25 dBm in post-layout simulation, compared with −31 dBm measured for the original, a gap of about 6 dB. Expected contributors include the higher threshold voltages and parasitics of the 180 nm process and the choice of a Dickson rectifier, which interfaces directly with the single-ended PIFA without a balun but is less efficient than the original's cross-coupled rectifier.",
+          "Simplified: our encoder implements a preamble, data registers and Manchester coding, without the original's Barker-code packet identification, CRC and convolutional coding.",
+          "Not evaluated: cold-start charging time, backscatter power and over-the-air link performance, which were measured on the original fabricated chip but were outside the scope of this simulation-based redesign.",
+        ],
+      },
+      {
         heading: "My contributions",
         bullets: [
           "Designed the hysteresis comparator for the power-management unit end to end: schematic, simulation, custom layout, DRC/LVS verification and post-layout (PEX) simulation.",
@@ -334,25 +346,16 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Comparison with the original chip",
-        bullets: [
-          "Matched: the power-management control behavior. Our hysteresis comparator reproduces the original chip's 0.9 V and 0.6 V switching thresholds and held them within about 20 mV after layout, with the same 10 nF storage capacitor.",
-          "Matched in architecture: like the original, the backscatter block avoids a power-hungry LDO by biasing a ring-oscillator clock with a PTAT current reference, uses self-clocked Manchester encoding and transmits by on-off keying through an antenna switch, with a voltage limiter for overvoltage protection.",
-          "Differed: rectifier sensitivity. The redesign reached −25 dBm in post-layout simulation, compared with −31 dBm measured for the original, a gap of about 6 dB. Expected contributors include the higher threshold voltages and parasitics of the 180 nm process and the choice of a Dickson rectifier, which interfaces directly with the single-ended PIFA without a balun but is less efficient than the original's cross-coupled rectifier.",
-          "Simplified: our encoder implements a preamble, data registers and Manchester coding, without the original's Barker-code packet identification, CRC and convolutional coding.",
-          "Not evaluated: cold-start charging time, backscatter power and over-the-air link performance, which were measured on the original fabricated chip but were outside the scope of this simulation-based redesign.",
-        ],
-      },
-      {
         heading: "Takeaways",
         paragraphs: [
           "Block-level control and timing specifications, such as the comparator thresholds and the PTAT-biased clock, transferred closely from 65 nm to 180 nm and remained stable after layout, with the trip points within about 20 mV and the clock within 0.2 kHz of their pre-layout values. RF performance did not transfer as directly: rectifier sensitivity depends strongly on device thresholds, parasitics and the antenna–rectifier interface, and was the main specification where the redesign fell short of the original. The project showed both how closely a published design can be reproduced and where process technology sets the limits.",
         ],
       },
     ],
-    tables: [
-      {
+    featuredTable: {
         caption: "Original chip vs. our redesign",
+        intro:
+          "The project's main objective was to reproduce the published chip as closely as possible in 180 nm. The table compares the original chip's measured results with our post-layout simulation results.",
         columns: ["Parameter", "Original (JSSC 2025, measured)", "Our redesign (post-layout sim.)"],
         rows: [
           ["Technology", "TSMC 65 nm LP CMOS", "180 nm CMOS"],
@@ -366,8 +369,7 @@ export const projects: Project[] = [
           ["Data encoding", "Barker code, ID, data, CRC; convolutional + Manchester coding", "Preamble, data registers, PISO; Manchester coding"],
           ["Cold-start time", "≈ 19–20 s at −31 dBm", "Not evaluated"],
         ],
-      },
-    ],
+    },
     figures: [
       { src: rficBlockDiagram, caption: "System block diagram: energy harvester and power-management unit with the backscatter block" },
       { src: rficComparatorSchematic, caption: "Hysteresis comparator schematic" },
