@@ -30,7 +30,9 @@ export default function ProjectsPage() {
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-contain p-6 transition duration-500 group-hover:scale-[1.04]"
+                  className={`transition duration-500 group-hover:scale-[1.04] ${
+                    p.coverIsPhoto ? "object-cover object-[50%_6%]" : "object-contain p-6"
+                  }`}
                 />
                 <div className="absolute inset-0 bg-[#28211e]/0 transition group-hover:bg-[#28211e]/5" />
               </div>

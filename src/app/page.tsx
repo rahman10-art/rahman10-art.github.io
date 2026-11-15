@@ -119,7 +119,9 @@ export default function Home() {
                   src={p.cover}
                   alt=""
                   sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[4/3] w-full object-contain p-6 transition duration-500 group-hover:scale-[1.03]"
+                  className={`aspect-[4/3] w-full transition duration-500 group-hover:scale-[1.03] ${
+                    p.coverIsPhoto ? "object-cover object-[50%_6%]" : "object-contain p-6"
+                  }`}
                 />
               </div>
               <div className={i % 2 ? "md:text-right" : ""}>

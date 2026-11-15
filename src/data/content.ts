@@ -22,6 +22,7 @@ import tegArcResponse from "@/assets/teg/arc-response.png";
 import tegComsol from "@/assets/teg/comsol-teg.png";
 import tegArcCurrentTemp from "@/assets/teg/arc-current-temp.png";
 
+import radarPoster from "@/assets/radar/poster-presentation.jpg";
 import radarTreeVsLinear from "@/assets/radar/tree-vs-linear.png";
 import radarGainBeamwidth from "@/assets/radar/array-gain-beamwidth.png";
 import radarScanPowerTime from "@/assets/radar/scan-power-time.png";
@@ -132,6 +133,8 @@ export type Project = {
   affiliation?: string;
   summary: string;
   cover: StaticImageData;
+  /** Set when the cover is a photograph: it fills its tile instead of being shown whole on white. */
+  coverIsPhoto?: boolean;
   tags: string[];
   metrics: Metric[];
   sections: Section[];
@@ -151,7 +154,8 @@ export const projects: Project[] = [
       "SRC JUMP 2.0 CogniSense Center · IBIS Lab, University of Maryland · with Prof. Pamela Abshire · Current Ph.D. research",
     summary:
       "Current Ph.D. research on reducing the power of 77 GHz FMCW radar for autonomous navigation, from hierarchical tree-search beam scanning on the transmitter to hybrid receiver beamforming that compresses antenna signals in the analog domain before digitization.",
-    cover: radarTreeVsLinear,
+    cover: radarPoster,
+    coverIsPhoto: true,
     tags: [
       "mmWave FMCW Radar",
       "Beamforming",
@@ -172,7 +176,7 @@ export const projects: Project[] = [
         heading: "Overview",
         paragraphs: [
           "Millimeter-wave FMCW radars for automotive sensing, drone surveillance and collision avoidance rely on large antenna arrays and beamforming to overcome severe path loss. As arrays grow for finer angular resolution, the power spent on beam scanning, RF front-end circuitry and data conversion becomes a central design constraint.",
-          "This work is part of CogniSense, one of seven centers in the Semiconductor Research Corporation's JUMP 2.0 program, sponsored by DARPA. My research analyzes radar power at both the system level (scanning strategy and beamforming architecture) and the circuit level (transmitter and receiver components), and is summarized in two manuscripts, one of which is under review in IEEE Transactions on Radar Systems.",
+          "This work is part of CogniSense, one of seven centers in the Semiconductor Research Corporation's JUMP 2.0 program, sponsored by DARPA. My research analyzes radar power at both the system level (scanning strategy and beamforming architecture) and the circuit level (transmitter and receiver components), and is summarized in two manuscripts, one of which is under review in IEEE Transactions on Radar Systems. I presented the tree-search and transmitter-power work at the CogniSense Annual Review at Georgia Tech in 2025.",
         ],
       },
       {
@@ -248,6 +252,7 @@ export const projects: Project[] = [
       },
     ],
     figures: [
+      { src: radarPoster, caption: "Presenting \"Investigating Power Trade-offs in Linear and Tree Search in FMCW Radar\" at the CogniSense Annual Review, Georgia Tech, 2025" },
       { src: radarTreeVsLinear, caption: "Tree-search (a) vs. linear-search (b) beam scanning across angular regions" },
       { src: radarGainBeamwidth, caption: "Array gain and beamwidth vs. number of antenna elements" },
       { src: radarScanPowerTime, caption: "Transmitted power per scan, total scan power and search duration vs. array size" },
