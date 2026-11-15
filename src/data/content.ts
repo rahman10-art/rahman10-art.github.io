@@ -274,13 +274,13 @@ export const projects: Project[] = [
   {
     slug: "rf-energy-harvesting-backscatter-ic",
     title:
-      "Batteryless RF Energy-Harvesting and Backscatter IC for RFID Tags",
+      "Redesign of a Batteryless RF Energy-Harvesting and Backscatter IC",
     shortTitle: "RF Energy-Harvesting & Backscatter IC",
     category: "IC Design",
     affiliation:
-      "ENEE 719M: Analog and Mixed-Signal Design · University of Maryland · Team of three",
+      "ENEE 719M: Analog and Mixed-Signal Design · University of Maryland · Team of three · Redesign of Yildirim et al., IEEE JSSC 2025",
     summary:
-      "A 180 nm CMOS power-management and backscatter chip for batteryless RFID tags. I designed the hysteresis comparator that switches the chip between energy harvesting and communication, and laid out the backscatter block's reference, clock and digital control circuits.",
+      "A 180 nm CMOS redesign of a published battery-free 5G energy-harvester and backscatter chip (IEEE JSSC, 2025) for batteryless RFID tags. I designed the hysteresis comparator that switches the chip between energy harvesting and communication, and laid out the backscatter block's reference, clock and digital control circuits.",
     cover: rficComparatorLayout,
     tags: [
       "Cadence Virtuoso",
@@ -301,8 +301,8 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paragraphs: [
-          "Batteryless RFID tags and low-power IoT nodes must operate from very small amounts of ambient RF energy. This project co-designed the antenna and power-management electronics of an energy-harvesting tag, rather than optimizing each block in isolation, so that the rectifier is designed for the non-ideal impedance the antenna actually presents.",
-          "The system combines a planar inverted-F antenna with a 24-transistor Dickson rectifier, an RF-tunable capacitor array for multiband (2.4–7 GHz) matching, a beta-multiplier voltage reference, a hysteresis comparator, and a backscatter block that transmits tag data by modulating the antenna impedance. The rectifier reached −25 dBm sensitivity and 8.2% power-conversion efficiency after parasitic extraction.",
+          "This project redesigned the battery-free 5G energy-harvester and backscatter chip reported by Yildirim et al. (MIT and Ericsson Research, IEEE Journal of Solid-State Circuits, 2025). The original 3.5 GHz chip, fabricated in TSMC 65 nm CMOS for IoT-enabled warehouses, harvests RF energy with a rectifier, uses a hysteresis comparator in its power-management unit to switch between harvesting and communication, and transmits data through a PTAT-biased backscatter block with an on-chip ring-oscillator clock and self-clocked encoding.",
+          "Our team re-implemented this architecture in 180 nm CMOS and adapted it for robustness to antenna detuning, which occurs when a tag's placement changes the antenna's effective electrical length. In place of the original loop antenna and cross-coupled rectifier, we co-designed a single-port planar inverted-F antenna with a 24-transistor Dickson rectifier and an RF-tunable capacitor array for multiband (2.4–7 GHz) matching. The redesigned rectifier reached −25 dBm sensitivity and 8.2% power-conversion efficiency after parasitic extraction.",
         ],
       },
       {
@@ -316,7 +316,7 @@ export const projects: Project[] = [
         heading: "Hysteresis comparator",
         paragraphs: [
           "The comparator is the central control element of the power-management unit. It monitors the voltage on the storage capacitor and toggles a PMOS switch to move the chip between the energy-harvesting phase (charging the capacitor) and the communication phase (powering the backscatter block).",
-          "The design uses a PMOS input stage, an NMOS current mirror and a PMOS load with positive feedback. The current mirror transfers the input-stage signal to the load, and the positive feedback creates the bistable behavior that sets two distinct trip points: VH = 0.9 V for the transition to communication and VL = 0.6 V for the return to harvesting. Hysteresis prevents the chip from oscillating between modes as the stored voltage fluctuates.",
+          "The design uses a PMOS input stage, an NMOS current mirror and a PMOS load with positive feedback. The current mirror transfers the input-stage signal to the load, and the positive feedback creates the bistable behavior that sets two distinct trip points: VH = 0.9 V for the transition to communication (matching the original design's 0.9 V threshold) and VL = 0.6 V for the return to harvesting. Hysteresis prevents the chip from oscillating between modes as the stored voltage fluctuates.",
           "After layout and parasitic extraction, both trip points shifted by only about 20 mV, showing that the layout preserved the intended hysteresis window.",
         ],
       },
@@ -343,6 +343,12 @@ export const projects: Project[] = [
       { src: rficEncoderDiagram, caption: "Digital encoder: preamble and data registers, PISO and Manchester encoder" },
       { src: rficBackscatterLayout, caption: "Layout of the backscatter block" },
       { src: rficBackscatterOutput, caption: "Backscatter block waveforms: main clock, divided clocks, packet and Manchester-encoded data" },
+    ],
+    links: [
+      {
+        label: "Original chip (IEEE JSSC 2025)",
+        href: "https://doi.org/10.1109/JSSC.2024.3498602",
+      },
     ],
   },
   {
