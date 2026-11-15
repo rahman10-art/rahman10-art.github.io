@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 /** The three projects highlighted on this page, in order. */
-const highlightSlugs = ["spike-sorting-vlsi", "iss-cream-pedestal", "fructocare-capsule"];
+const highlightSlugs = ["cognisense-mmwave-radar", "iss-cream-pedestal", "fructocare-capsule"];
 
 export default function SummaryPage() {
   const highlights = highlightSlugs
@@ -95,15 +95,21 @@ export default function SummaryPage() {
               <li key={pub.title} className="max-w-4xl">
                 <p className="font-semibold leading-snug">{pub.title}</p>
                 <p className="mt-1 text-muted">
-                  {pub.venue} —{" "}
-                  <a
-                    href={pub.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-ink underline underline-offset-4 hover:text-accent"
-                  >
-                    Publication link
-                  </a>
+                  {pub.venue}
+                  {pub.href && (
+                    <>
+                      {" "}
+                      —{" "}
+                      <a
+                        href={pub.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-ink underline underline-offset-4 hover:text-accent"
+                      >
+                        Publication link
+                      </a>
+                    </>
+                  )}
                 </p>
               </li>
             ))}

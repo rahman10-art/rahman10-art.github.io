@@ -22,6 +22,14 @@ import tegArcResponse from "@/assets/teg/arc-response.png";
 import tegComsol from "@/assets/teg/comsol-teg.png";
 import tegArcCurrentTemp from "@/assets/teg/arc-current-temp.png";
 
+import radarTreeVsLinear from "@/assets/radar/tree-vs-linear.png";
+import radarGainBeamwidth from "@/assets/radar/array-gain-beamwidth.png";
+import radarScanPowerTime from "@/assets/radar/scan-power-time.png";
+import radarTxSensitivity from "@/assets/radar/tx-power-sensitivity.png";
+import radarBfArchitectures from "@/assets/radar/bf-architectures.png";
+import radarAfeCompression from "@/assets/radar/afe-compression.png";
+import radarBfPower from "@/assets/radar/bf-power-breakdown.png";
+import radarSnrAdc from "@/assets/radar/snr-vs-adc.png";
 import creamScd from "@/assets/cream/scd.jpg";
 import creamInstrument from "@/assets/cream/instrument.jpg";
 import creamCmsLeakage from "@/assets/cream/cms-leakage.png";
@@ -78,7 +86,7 @@ export const profile = {
   about: [
     "I am a fourth-year Ph.D. student in Electrical and Electronics Engineering at the University of Maryland, College Park, specializing in microelectronics. My research focuses on the design of analog and mixed-signal integrated circuits for biomedical, sensing and space-exploration applications.",
     "My primary interest is electronics for spaceborne instrumentation, including payloads, particle detectors and CubeSats. This interest began with my early exposure to space science in Dhaka, Bangladesh, and has guided my work from undergraduate space-research projects through my doctoral research.",
-    "My project experience spans several areas of electrical engineering: analog VLSI for neural-signal processing, rigid-flex PCB design for ingestible medical devices, radiation-effects analysis for an instrument aboard the International Space Station, and energy harvesting from electrostatic arcing on satellite solar arrays.",
+    "My current doctoral research, part of the SRC JUMP 2.0 CogniSense center, focuses on power-efficient beamforming and beam-scanning architectures for millimeter-wave FMCW radar. My other project experience includes analog VLSI for neural-signal processing, rigid-flex PCB design for ingestible medical devices, radiation-effects analysis for an instrument aboard the International Space Station, and energy harvesting from electrostatic arcing on satellite solar arrays.",
   ],
   /** Longer personal statement shown on the About page */
   statement: [
@@ -88,6 +96,7 @@ export const profile = {
     "I am also interested in other areas of electrical engineering, particularly analog and mixed-signal circuits for biomedical sensing and implantable technologies.",
   ],
   interests: [
+    "mmWave radar systems",
     "Analog IC design",
     "Mixed-signal & VLSI",
     "Space instrumentation",
@@ -132,6 +141,123 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    slug: "cognisense-mmwave-radar",
+    title:
+      "Power-Efficient Beamforming and Beam Scanning for mmWave FMCW Radar",
+    shortTitle: "CogniSense: Low-Power mmWave Radar",
+    category: "Research",
+    affiliation:
+      "SRC JUMP 2.0 CogniSense Center · IBIS Lab, University of Maryland · with Prof. Pamela Abshire · Current Ph.D. research",
+    summary:
+      "Current Ph.D. research on reducing the power of 77 GHz FMCW radar for autonomous navigation, from hierarchical tree-search beam scanning on the transmitter to hybrid receiver beamforming that compresses antenna signals in the analog domain before digitization.",
+    cover: radarTreeVsLinear,
+    tags: [
+      "mmWave FMCW Radar",
+      "Beamforming",
+      "System-Level Power Modeling",
+      "RF Transmitter Circuits",
+      "Compute-in-Memory",
+      "MATLAB",
+      "Ansys HFSS",
+    ],
+    metrics: [
+      { value: "80–96%", label: "Average search-time reduction with tree search (8–32 TX)" },
+      { value: "12–60%", label: "Average transmitted-power saving in sparse scenes" },
+      { value: "17–26%", label: "Receiver power reduction with hybrid beamforming" },
+      { value: "77 GHz", label: "Automotive FMCW radar band" },
+    ],
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          "Millimeter-wave FMCW radars for automotive sensing, drone surveillance and collision avoidance rely on large antenna arrays and beamforming to overcome severe path loss. As arrays grow for finer angular resolution, the power spent on beam scanning, RF front-end circuitry and data conversion becomes a central design constraint.",
+          "This work is part of CogniSense, one of seven centers in the Semiconductor Research Corporation's JUMP 2.0 program, sponsored by DARPA. My research analyzes radar power at both the system level (scanning strategy and beamforming architecture) and the circuit level (transmitter and receiver components), and is summarized in two manuscripts.",
+        ],
+      },
+      {
+        heading: "Research objectives",
+        bullets: [
+          "Determine when hierarchical tree-search beam scanning is faster and more power-efficient than conventional linear scanning, and how the advantage depends on array size and scene sparsity.",
+          "Connect scanning-level savings to transmitter circuit power, identifying which RF building blocks dominate the DC power budget.",
+          "Quantify the power and spatial-flexibility tradeoffs of analog, fully digital and hybrid receiver beamforming, including the effect of ADC resolution and quantization noise.",
+          "Evaluate adaptive analog feature extraction and compression before the ADCs as a way to reduce receiver power while preserving multiple spatial measurements.",
+        ],
+      },
+      {
+        heading: "Approach",
+        steps: [
+          {
+            title: "Antenna and array modeling",
+            body: "Modeled patch antennas and phased arrays in Ansys HFSS to characterize gain, beamwidth, return loss and beam steering as the number of elements increases, informing the array-gain and beamwidth scaling used in the system models.",
+          },
+          {
+            title: "Tree search vs. linear search",
+            body: "Built analytical models from the radar equation and Marcum-Q detection statistics (99% detection probability, 10% false-alarm probability) to compare a coarse-to-fine tree search, which starts with a broad 2-TX beam and refines with larger arrays only where targets are detected, against exhaustive linear scanning as a function of scene sparsity.",
+          },
+          {
+            title: "Transmitter circuit power",
+            body: "Extended the analysis to transmitter DC power by modeling the sensitivity of a 77 GHz transmitter to VCO biasing, PLL loop bandwidth, injection-locked frequency-tripler injection power and power-amplifier efficiency, using published circuit implementations as references.",
+          },
+          {
+            title: "Beamforming power models",
+            body: "Developed component-level power models in a MATLAB radar simulation framework for LNAs, mixers and LO distribution, baseband amplifiers and data converters, and used an additive quantization-noise model to relate converter resolution to effective SNR for an eight-element array.",
+          },
+          {
+            title: "Hybrid receiver with analog feature extraction",
+            body: "Modeled a hybrid receiver that compresses eight antenna signals into four or two feature channels before digitization using an adaptive mixed-signal compute-in-memory engine (AdaAFE-CIM), whose SRAM-based current-domain vector-matrix multiplier tracks the dominant spatial subspace with Oja's algorithm.",
+          },
+        ],
+      },
+      {
+        heading: "Key findings",
+        bullets: [
+          "In a sparse scene (0.074% object-occurrence probability), tree search reduced average transmitted power by 11.5%, 59.0% and 59.6% and average search time by 79.9%, 91.6% and 95.8% for 8-, 16- and 32-TX arrays.",
+          "Tree search remains more power-efficient than linear search as long as fewer than about 9.4%, 51.6% and 49.2% of scanned sectors contain targets for the 8-, 16- and 32-TX configurations.",
+          "Including circuit power, an 8-TX tree search has a total power advantage when transmitter DC power is at least 3.18× the radiated power. VCO biasing and power-amplifier efficiency dominate the transmitter's DC power sensitivity, while PLL loop bandwidth and tripler injection power have comparatively small effects.",
+          "For an eight-element receiver with 8-bit ADCs, fully digital beamforming consumes 762.2 mW, while analog beamforming consumes 165.3 mW but provides only one spatial measurement per acquisition. Hybrid compression to four or two channels lowers receiver power to 632.4 mW (−17.0%) and 565.9 mW (−25.8%) relative to digital beamforming, including a 3.32 mW feature-extraction overhead.",
+          "Normalized per retained spatial direction, digital beamforming is the most efficient (95.3 mW per direction), and the benefit of pre-ADC compression falls to about 1–2% with 4-bit ADCs because converter power grows exponentially with resolution.",
+        ],
+      },
+      {
+        heading: "Takeaways",
+        paragraphs: [
+          "Power-efficient radar sensing cannot be optimized at a single level of the design. The advantage of hierarchical scanning depends on scene sparsity, array size and the efficiency of the transmitter circuits, and no single receiver beamforming architecture minimizes both total power and power per spatial direction. Hybrid architectures that combine analog-domain preprocessing with digital flexibility offer a scalable path as radar arrays grow, particularly when high-resolution converters are required.",
+        ],
+      },
+    ],
+    tables: [
+      {
+        caption: "Tree search vs. linear search (sparse scene)",
+        columns: ["Array", "Avg. power saving", "Avg. time reduction", "Max. sparsity ρmax"],
+        rows: [
+          ["8 TX", "11.5%", "79.9%", "≈ 9.4%"],
+          ["16 TX", "59.0%", "91.6%", "≈ 51.6%"],
+          ["32 TX", "59.6%", "95.8%", "≈ 49.2%"],
+        ],
+      },
+      {
+        caption: "Eight-element receiver power (8-bit ADCs)",
+        columns: ["Architecture", "Total power", "Spatial directions", "Power / direction"],
+        rows: [
+          ["Analog BF", "165.3 mW", "1", "165.3 mW"],
+          ["Digital BF", "762.2 mW", "8", "95.3 mW"],
+          ["Hybrid BF (m = 4)", "632.4 mW", "4", "158.1 mW"],
+          ["Hybrid BF (m = 2)", "565.9 mW", "2", "282.9 mW"],
+        ],
+      },
+    ],
+    figures: [
+      { src: radarTreeVsLinear, caption: "Tree-search (a) vs. linear-search (b) beam scanning across angular regions" },
+      { src: radarGainBeamwidth, caption: "Array gain and beamwidth vs. number of antenna elements" },
+      { src: radarScanPowerTime, caption: "Transmitted power per scan, total scan power and search duration vs. array size" },
+      { src: radarTxSensitivity, caption: "Sensitivity of transmitter DC power to VCO biasing, PLL bandwidth, tripler injection power and PA efficiency" },
+      { src: radarBfArchitectures, caption: "Analog TX/RX, fully digital RX and hybrid RX beamforming architectures" },
+      { src: radarAfeCompression, caption: "Analog feature extraction and compression ahead of the ADCs (inset: AFE-CIM concept from prior work)" },
+      { src: radarSnrAdc, caption: "Effective SNR vs. ADC resolution under the additive quantization-noise model" },
+      { src: radarBfPower, caption: "Receiver power breakdown for analog, digital and hybrid beamforming" },
+    ],
+  },
   {
     slug: "iss-cream-pedestal",
     title:
@@ -500,7 +626,17 @@ export const projects: Project[] = [
 /* Publications                                                        */
 /* ------------------------------------------------------------------ */
 
-export const publications = [
+export const publications: { title: string; venue: string; href?: string }[] = [
+  {
+    title:
+      "Tree Search for Power-Efficient Sparse Object Detection in FMCW Radar",
+    venue: "M. Rahman and P. Abshire · Manuscript",
+  },
+  {
+    title:
+      "Power Tradeoffs for Analog, Digital, and Hybrid Beamforming Architectures in FMCW Radars",
+    venue: "M. Rahman and P. Abshire · Manuscript",
+  },
   {
     title:
       "Energy Extraction Using Thermoelectric Generator from Solar Array Arcing in Space Applications",
@@ -534,6 +670,8 @@ export const skills: { group: string; items: string[] }[] = [
       "Sensor front-ends",
       "Detector readout electronics",
       "Radiation effects in silicon",
+      "mmWave FMCW radar & beamforming",
+      "System-level power modeling",
       "Biomedical devices",
     ],
   },
@@ -543,6 +681,7 @@ export const skills: { group: string; items: string[] }[] = [
       "Cadence Virtuoso",
       "TSMC 180 nm PDK",
       "SkyWater SKY130 PDK",
+      "Ansys HFSS",
       "Xschem / ngspice",
       "COMSOL Multiphysics",
       "MATLAB",

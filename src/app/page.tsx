@@ -84,7 +84,7 @@ export default function Home() {
       <Feature
         flip
         title="Electronics for space, sensing and medicine"
-        body="My project experience includes radiation-effects analysis for a cosmic-ray instrument aboard the International Space Station, energy harvesting from electrostatic arcing on satellite solar arrays, and rigid-flex PCB design for an ingestible medical device."
+        body="My current Ph.D. research, within the SRC JUMP 2.0 CogniSense center, addresses power-efficient beamforming and beam scanning for millimeter-wave FMCW radar. My project experience also includes radiation-effects analysis for a cosmic-ray instrument aboard the International Space Station and rigid-flex PCB design for an ingestible medical device."
         image={
           (capsule.figures.find((f) => f.caption.startsWith("How the capsule works")) ?? capsule.figures[0]).src
         }

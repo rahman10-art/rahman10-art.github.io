@@ -91,7 +91,7 @@ export default async function ProjectPage({
       </dl>
 
       {/* ---------- Body ---------- */}
-      <div className="mt-16 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="mt-16 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="space-y-12">
           {project.sections.map((s) => (
             <section key={s.heading}>
